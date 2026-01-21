@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:vathiyar_ai_flutter/widgets/show_pop_error.dart';
 import '../../../core/services/cognito_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -129,16 +130,13 @@ class LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           bool success = await CognitoService.signIn(
+                            context,
                             emailOrmobileNoController.text,
                             passwordController.text,
                           );
                           if (!mounted) return;
                           if (success) {
-                            print('Login success');
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Login failed')),
-                            );
+                            showPopError(context, "Login successfull","success");
                           }
                         }
                       },
