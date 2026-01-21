@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +11,16 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
+
+  final emailOrmobileNoController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailOrmobileNoController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +37,32 @@ class LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(24.0),
               child: Form(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
+                      controller: emailOrmobileNoController,
                       decoration: const InputDecoration(
                         labelText: 'Email/Phone number',
                         labelStyle: TextStyle(fontSize: 16),
                       ),
-                      validator: (value) {
+                      validator:(value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return 'Please enter your email or phone number';
+                        }
+                        final isEmail = EmailValidator.validate(value);
+                        final isPhone = RegExp(r'^[0-9]+$').hasMatch(value);
+
+                        if (!isEmail && !isPhone) {
+                          return 'Please enter a valid email or phone number';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 6),
                     TextFormField(
+                      controller: passwordController,
                       obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -64,13 +84,39 @@ class LoginPageState extends State<LoginPage> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
                         }
-                        return null;
+
+                        // Check length
+                        if (value.length < 8) {
+                          return 'Password must be at least 8 characters';
+                        }
+
+                        // Check uppercase
+                        if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                          return 'Add one uppercase letter';
+                        }
+
+                        // Check lowercase
+                        if (!RegExp(r'[a-z]').hasMatch(value)) {
+                          return 'Add one lowercase letter';
+                        }
+
+                        // Check number
+                        if (!RegExp(r'[0-9]').hasMatch(value)) {
+                          return 'Add one number';
+                        }
+
+                        // Check special character
+                        if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) {
+                          return 'Add one special character';
+                        }
+
+                        return null; 
                       },
                     ),
                     SizedBox(height: 6),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Color(0xFF016A63),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -81,36 +127,43 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Process data
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Logging In')),
+                            const SnackBar(content: Text('Processing Data')),
                           );
                         }
+                        print(
+                          "Email or Mobile no : ${emailOrmobileNoController.text}",
+                        );
+                        print("Password :${passwordController.text}");
                       },
-                      child: Text("Login"),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
                     ),
                     SizedBox(height: 6),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        side: BorderSide(
-                          width: 0,
-                          color: Colors
-                              .transparent, // or use any specific color and set width to 0
-                        ),
+                        side: BorderSide.none, // No border
+                        elevation: 0, // Remove shadow
+                        shadowColor: Colors.transparent, // Extra safety
                         minimumSize: const Size(
                           double.infinity,
                           50,
-                        ), // Full width button
+                        ), // Full width
                       ),
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Process data
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Forget Password')),
-                          );
-                        }
+                        print("Forget Password");
+                      
                       },
-                      child: Text("Login"),
+                      child: const Text(
+                        "Forget Password",
+                        style: TextStyle(
+                          fontSize: 18, // Text size
+                          fontWeight: FontWeight.bold, // Text weight
+                          color: Color(0xFF016A63), // Text color
+                        ),
+                      ),
                     ),
                   ],
                 ),
