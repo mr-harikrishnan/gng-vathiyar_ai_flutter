@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-void showPopError(BuildContext context, String message ,String result) {
-  showDialog(
+Future<void> showPopError (BuildContext context, String message ,String result) {
+  return showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(

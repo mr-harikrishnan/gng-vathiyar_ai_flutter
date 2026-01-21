@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
 import 'package:vathiyar_ai_flutter/features/auth/ui/login_screen.dart';
+import 'package:vathiyar_ai_flutter/features/dashboard/ui/dashboard_screen.dart';
 
 
 void main() {
@@ -25,9 +26,13 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      routes: {
+        "/" : (context) => const LoginPage(),
+        "/dashboard" : (context) => Dashboard()
+      },
+      initialRoute: "/",
     );
   }
 }

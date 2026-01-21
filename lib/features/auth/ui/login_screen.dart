@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
   final emailOrmobileNoController = TextEditingController();
   final passwordController = TextEditingController();
@@ -128,22 +129,47 @@ class LoginPageState extends State<LoginPage> {
                         ), // Full width button
                       ),
                       onPressed: () async {
+                        if (_isLoading) return;
                         if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
                           bool success = await CognitoService.signIn(
                             context,
                             emailOrmobileNoController.text,
                             passwordController.text,
                           );
                           if (!mounted) return;
+                          setState(() {
+                            _isLoading = false;
+                          });
                           if (success) {
-                            showPopError(context, "Login successfull","success");
+                            await showPopError(
+                              context,
+                              "Login successfull",
+                              "success",
+                            );
+                            if (!mounted) return;
+                            Navigator.pushNamed(context, '/dashboard');
                           }
                         }
                       },
-                      child: Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              "Login",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
                     ),
                     SizedBox(height: 6),
                     ElevatedButton(
