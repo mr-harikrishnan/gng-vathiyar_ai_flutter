@@ -11,6 +11,9 @@ dependencies:
     sdk: flutter
     
   email_validator: ^2.1.17
+  amplify_flutter: ^1.6.1
+  amplify_auth_cognito: ^1.6.1
+  amplify_api: ^1.6.1
 
 
 dev_dependencies:

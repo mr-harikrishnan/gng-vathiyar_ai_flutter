@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import '../../../core/services/cognito_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -47,12 +48,12 @@ class LoginPageState extends State<LoginPage> {
                         labelText: 'Email/Phone number',
                         labelStyle: TextStyle(fontSize: 16),
                       ),
-                      validator:(value) {
+                      validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email or phone number';
                         }
                         final isEmail = EmailValidator.validate(value);
-                        final isPhone = RegExp(r'^[0-9]+$').hasMatch(value);
+                        final isPhone = RegExp(r'^\+?[0-9]+$').hasMatch(value);
 
                         if (!isEmail && !isPhone) {
                           return 'Please enter a valid email or phone number';
@@ -110,7 +111,7 @@ class LoginPageState extends State<LoginPage> {
                           return 'Add one special character';
                         }
 
-                        return null; 
+                        return null;
                       },
                     ),
                     SizedBox(height: 6),
@@ -125,16 +126,21 @@ class LoginPageState extends State<LoginPage> {
                           50,
                         ), // Full width button
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
+                          bool success = await CognitoService.signIn(
+                            emailOrmobileNoController.text,
+                            passwordController.text,
                           );
+                          if (!mounted) return;
+                          if (success) {
+                            print('Login success');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Login failed')),
+                            );
+                          }
                         }
-                        print(
-                          "Email or Mobile no : ${emailOrmobileNoController.text}",
-                        );
-                        print("Password :${passwordController.text}");
                       },
                       child: Text(
                         "Login",
@@ -154,7 +160,6 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () {
                         print("Forget Password");
-                      
                       },
                       child: const Text(
                         "Forget Password",

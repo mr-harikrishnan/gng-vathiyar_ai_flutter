@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
 import 'package:vathiyar_ai_flutter/features/auth/ui/login_screen.dart';
+
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Setup Amplify once
+    CognitoService.configure();
+  }
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage()
+      home: LoginPage(),
     );
   }
 }
