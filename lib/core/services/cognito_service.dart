@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:vathiyar_ai_flutter/widgets/show_pop_error.dart';
-import 'package:vathiyar_ai_flutter/widgets/snack_bar.dart';
 import '../../amplifyconfiguration.dart';
 
 class CognitoService {
