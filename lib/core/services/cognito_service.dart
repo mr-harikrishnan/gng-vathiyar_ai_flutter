@@ -24,7 +24,11 @@ class CognitoService {
   }
 
   // Login
-  static Future<bool> signIn(BuildContext context, String email, String password) async {
+  static Future<bool> signIn(
+    BuildContext context,
+    String email,
+    String password,
+  ) async {
     try {
       signOut();
       final result = await Amplify.Auth.signIn(
@@ -32,7 +36,7 @@ class CognitoService {
         password: password,
       );
       print("signIn user data...  $result");
-      
+
       return result.isSignedIn;
     } on AuthException catch (e) {
       if (context.mounted) {
@@ -52,6 +56,29 @@ class CognitoService {
       await Amplify.Auth.signOut();
     } catch (e) {
       print('Logout error: $e');
+    }
+  }
+
+  static Future<void> getCognitoTokens() async {
+    try {
+      final result = await Amplify.Auth.fetchAuthSession(
+        options: const FetchAuthSessionOptions(),
+      );
+      final cognitoSession = result as CognitoAuthSession;
+
+      if (cognitoSession.isSignedIn) {
+        final userPoolTokens = cognitoSession.userPoolTokensResult.value;
+
+        final accessToken = userPoolTokens.accessToken;
+        final refreshToken = userPoolTokens.refreshToken;
+        final idToken = userPoolTokens.idToken;
+
+        print('Access Token: $accessToken');
+        print('Refresh Token: $refreshToken');
+        print('ID Token: $idToken');
+      }
+    } on AuthException catch (e) {
+      print('Error fetching auth session: ${e.message}');
     }
   }
 }

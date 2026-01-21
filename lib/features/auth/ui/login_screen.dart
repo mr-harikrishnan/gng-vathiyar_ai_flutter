@@ -150,7 +150,8 @@ class LoginPageState extends State<LoginPage> {
                               "success",
                             );
                             if (!mounted) return;
-                            Navigator.pushNamed(context, '/dashboard');
+                            await CognitoService.getCognitoTokens();
+                            Navigator.pushReplacementNamed(context, '/dashboard');
                           }
                         }
                       },
