@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
+import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -8,10 +11,12 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  int _selectedIndex = 0; // Store selected menu
+  int _selectedIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
+    final GetxUserController user = Get.find();
     return Drawer(
       backgroundColor: const Color(0xFFEDF8F4),
       child: ListView(
@@ -36,19 +41,17 @@ class _AppDrawerState extends State<AppDrawer> {
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Harikrishnan',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                  children: [
+                    Obx(
+                      () => Text(
+                        user.email.value.isNotEmpty ? user.email.value : user.phone.value,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(height: 4),
-                    Text(
-                      'hari@gmail.com',
-                      style: TextStyle(fontSize: 12, color: Colors.black54),
-                    ),
                   ],
                 ),
               ],
@@ -65,7 +68,7 @@ class _AppDrawerState extends State<AppDrawer> {
             title: 'Dashboard',
             onTap: () {
               setState(() {
-                _selectedIndex = 0; // Update UI
+                _selectedIndex = 0; 
               });
               Navigator.pop(context);
             },
@@ -104,12 +107,12 @@ class _AppDrawerState extends State<AppDrawer> {
             index: 3,
             icon: Icons.logout,
             title: 'Logout',
-            onTap: () {
+            onTap: () async {
               setState(() {
                 _selectedIndex = 3;
               });
-              Navigator.pop(context);
-              // Add logout logic
+              await CognitoService.signOut();
+              Navigator.pushReplacementNamed(context, '/');
             },
           ),
 
@@ -142,9 +145,7 @@ class _AppDrawerState extends State<AppDrawer> {
       leading: Icon(icon, color: isSelected ? Colors.teal : Colors.black),
       title: Text(
         title,
-        style: TextStyle(
-          color: isSelected ? Colors.teal : Colors.black,
-        ),
+        style: TextStyle(color: isSelected ? Colors.teal : Colors.black),
       ),
       tileColor: isSelected ? Colors.white : null,
       onTap: onTap,

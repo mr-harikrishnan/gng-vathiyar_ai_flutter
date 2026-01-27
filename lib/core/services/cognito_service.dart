@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:get/get.dart';
+import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
 import 'package:vathiyar_ai_flutter/widgets/show_pop_error.dart';
 import '../../amplifyconfiguration.dart';
 
 class CognitoService {
   static bool _configured = false;
+  static final GetxUserController _userController =
+      Get.find<GetxUserController>();
 
   // Setup Amplify once when app starts
   static Future<void> configure() async {
@@ -38,6 +42,7 @@ class CognitoService {
       print("signIn user data...  $result");
 
       if (result.isSignedIn) {
+        await _userController.fetchUserData();
         if (context.mounted) {
           showPopError(context, "Sign in successful!", "Success");
         }
@@ -54,7 +59,10 @@ class CognitoService {
       print('Login error: $e');
       if (context.mounted) {
         showPopError(
-            context, 'An unknown error occurred during sign in.', "Error");
+          context,
+          'An unknown error occurred during sign in.',
+          "Error",
+        );
       }
       return false;
     }
@@ -64,6 +72,7 @@ class CognitoService {
   static Future<void> signOut() async {
     try {
       await Amplify.Auth.signOut();
+      _userController.clearUserData();
     } catch (e) {
       print('Logout error: $e');
     }
