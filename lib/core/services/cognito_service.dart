@@ -37,6 +37,12 @@ class CognitoService {
       );
       print("signIn user data...  $result");
 
+      if (result.isSignedIn) {
+        if (context.mounted) {
+          showPopError(context, "Sign in successful!", "Success");
+        }
+      }
+
       return result.isSignedIn;
     } on AuthException catch (e) {
       if (context.mounted) {
@@ -46,6 +52,10 @@ class CognitoService {
       return false;
     } catch (e) {
       print('Login error: $e');
+      if (context.mounted) {
+        showPopError(
+            context, 'An unknown error occurred during sign in.', "Error");
+      }
       return false;
     }
   }

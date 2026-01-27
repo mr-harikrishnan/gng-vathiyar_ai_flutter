@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-Future<void> showPopError (BuildContext context, String message ,String result) {
-  return showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(result == "Error" ?'Error' : "successfull"),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop(); // Dismiss the dialog
-            },
-          ),
-        ],
-      );
-    },
-  );
+Future<bool?> showPopError(BuildContext context, String message, String result) {
+  return Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: result == "Error" ? Colors.red : Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
