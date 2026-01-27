@@ -7,7 +7,7 @@ Future<bool?> showPopError(BuildContext context, String message, String result) 
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: result == "Error" ? Colors.red : Colors.green,
+      backgroundColor: result == "Error" ? Colors.red : const Color(0xFF016A63),
       textColor: Colors.white,
       fontSize: 16.0);
 }

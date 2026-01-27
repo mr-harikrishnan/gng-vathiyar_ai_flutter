@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/widgets/app_drawer.dart';
-import 'package:vathiyar_ai_flutter/widgets/calendor.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -22,17 +20,7 @@ class DashboardState extends State<Dashboard> {
         ),
       ),
       drawer: AppDrawer(),
-      body: Column(
-        children: [
-          Image.asset(
-            'assets/image1.png',
-            width: 350,
-            height: 350,
-            fit: BoxFit.cover,
-          ),
-          Expanded(child: CustomCalendarPage()),
-        ],
-      ),
+      body: Center(child: Text("Dashboard"),),
     );
   }
 }

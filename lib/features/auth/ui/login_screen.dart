@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:vathiyar_ai_flutter/widgets/show_pop_error.dart';
+import 'package:vathiyar_ai_flutter/widgets/show_pop.dart';
 import '../../../core/services/cognito_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -226,26 +226,6 @@ class LoginPageState extends State<LoginPage> {
                     ),
 
                     const SizedBox(height: 6),
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        side: BorderSide.none,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      onPressed: () {
-                        print("Forget Password");
-                      },
-                      child: const Text(
-                        "Forget Password",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF016A63),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
