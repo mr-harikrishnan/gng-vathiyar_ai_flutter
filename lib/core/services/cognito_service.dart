@@ -43,9 +43,6 @@ class CognitoService {
 
       if (result.isSignedIn) {
         await _userController.fetchUserData();
-        if (context.mounted) {
-          showPopError(context, "Sign in successful!", "Success");
-        }
       }
 
       return result.isSignedIn;
