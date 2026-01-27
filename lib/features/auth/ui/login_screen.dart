@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:vathiyar_ai_flutter/widgets/show_pop_error.dart';
 import '../../../core/services/cognito_service.dart';
@@ -17,6 +18,36 @@ class LoginPageState extends State<LoginPage> {
 
   final emailOrmobileNoController = TextEditingController();
   final passwordController = TextEditingController();
+
+  bool showPrefix = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    emailOrmobileNoController.addListener(() {
+      final text = emailOrmobileNoController.text;
+
+      final startsWithTwoDigits = RegExp(r'^[0-9]{2}').hasMatch(text);
+
+      final hasLetter = RegExp(r'[a-zA-Z]').hasMatch(text);
+
+      bool shouldShow;
+
+      if (startsWithTwoDigits && !hasLetter) {
+        shouldShow = true;
+      } else {
+        shouldShow = false;
+      }
+
+      // Prevent extra rebuild
+      if (showPrefix != shouldShow) {
+        setState(() {
+          showPrefix = shouldShow;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -46,24 +77,35 @@ class LoginPageState extends State<LoginPage> {
                   children: [
                     TextFormField(
                       controller: emailOrmobileNoController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Email/Phone number',
-                        labelStyle: TextStyle(fontSize: 16),
+                        labelStyle: const TextStyle(fontSize: 16),
+                        prefixText: showPrefix ? '+91 ' : null,
+                        prefixStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
+
+                      // Validate email or phone
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email or phone number';
                         }
+
                         final isEmail = EmailValidator.validate(value);
-                        final isPhone = RegExp(r'^\+?[0-9]+$').hasMatch(value);
+                        final isPhone = RegExp(r'^\+?[0-9]{10,12}$').hasMatch(value);
 
                         if (!isEmail && !isPhone) {
                           return 'Please enter a valid email or phone number';
                         }
+
                         return null;
                       },
                     ),
-                    SizedBox(height: 6),
+
+                    const SizedBox(height: 6),
+
                     TextFormField(
                       controller: passwordController,
                       obscureText: !_isPasswordVisible,
@@ -83,32 +125,29 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
+
+                      // Password rules
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
                         }
 
-                        // Check length
                         if (value.length < 8) {
                           return 'Password must be at least 8 characters';
                         }
 
-                        // Check uppercase
                         if (!RegExp(r'[A-Z]').hasMatch(value)) {
                           return 'Add one uppercase letter';
                         }
 
-                        // Check lowercase
                         if (!RegExp(r'[a-z]').hasMatch(value)) {
                           return 'Add one lowercase letter';
                         }
 
-                        // Check number
                         if (!RegExp(r'[0-9]').hasMatch(value)) {
                           return 'Add one number';
                         }
 
-                        // Check special character
                         if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) {
                           return 'Add one special character';
                         }
@@ -116,43 +155,56 @@ class LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 6),
+
+                    const SizedBox(height: 6),
+
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF016A63),
+                        backgroundColor:_isLoading? const Color.fromARGB(255, 102, 248, 238) : const Color(0xFF016A63),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        minimumSize: const Size(
-                          double.infinity,
-                          50,
-                        ), // Full width button
+                        minimumSize: const Size(double.infinity, 50),
                       ),
-                      onPressed: () async {
-                        if (_isLoading) return;
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          bool success = await CognitoService.signIn(
+                      onPressed: _isLoading ? null : () async {
+                        if (!_formKey.currentState!.validate()) return;
+
+                        setState(() {
+                          _isLoading = true;
+                        });
+
+                        // Prepare login value
+                        String loginValue = emailOrmobileNoController.text;
+
+                        // Add +91 if it's a 10-digit phone number
+                        if (RegExp(r'^[0-9]{10}$').hasMatch(loginValue)) {
+                          loginValue = '+91$loginValue';
+                        }
+
+                        bool success = await CognitoService. signIn(
+                          context,
+                          loginValue,
+                          passwordController.text,
+                        );
+
+                        if (!mounted) return;
+
+                        setState(() {
+                          _isLoading = false;
+                        });
+
+                        if (success) {
+                          await showPopError(
                             context,
-                            emailOrmobileNoController.text,
-                            passwordController.text,
+                            "Login successful",
+                            "success",
                           );
+
                           if (!mounted) return;
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          if (success) {
-                            await showPopError(
-                              context,
-                              "Login successfull",
-                              "success",
-                            );
-                            if (!mounted) return;
-                            await CognitoService.getCognitoTokens();
-                            Navigator.pushReplacementNamed(context, '/dashboard');
-                          }
+
+                          await CognitoService.getCognitoTokens();
+
+                          Navigator.pushReplacementNamed(context, '/dashboard');
                         }
                       },
                       child: _isLoading
@@ -172,16 +224,15 @@ class LoginPageState extends State<LoginPage> {
                               ),
                             ),
                     ),
-                    SizedBox(height: 6),
+
+                    const SizedBox(height: 6),
+
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        side: BorderSide.none, // No border
-                        elevation: 0, // Remove shadow
-                        shadowColor: Colors.transparent, // Extra safety
-                        minimumSize: const Size(
-                          double.infinity,
-                          50,
-                        ), // Full width
+                        side: BorderSide.none,
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                        minimumSize: const Size(double.infinity, 50),
                       ),
                       onPressed: () {
                         print("Forget Password");
@@ -189,9 +240,9 @@ class LoginPageState extends State<LoginPage> {
                       child: const Text(
                         "Forget Password",
                         style: TextStyle(
-                          fontSize: 18, // Text size
-                          fontWeight: FontWeight.bold, // Text weight
-                          color: Color(0xFF016A63), // Text color
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF016A63),
                         ),
                       ),
                     ),
