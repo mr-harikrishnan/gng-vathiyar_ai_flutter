@@ -13,50 +13,17 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
   int _selectedIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
     final GetxUserController user = Get.find();
+
     return Drawer(
       backgroundColor: const Color(0xFFEDF8F4),
       child: ListView(
         padding: EdgeInsets.zero,
-
         children: [
           // Header
-          Container(
-            padding: const EdgeInsets.only(
-              top: 40,
-              left: 20,
-              right: 20,
-              bottom: 10,
-            ),
-            color: const Color(0xFFEDF8F4),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 28,
-                  backgroundImage: AssetImage('assets/profile.png'),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(
-                      () => Text(
-                        user.email.value.isNotEmpty ? user.email.value : user.phone.value,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          _drawerHeader(user),
 
           const Divider(),
 
@@ -68,7 +35,7 @@ class _AppDrawerState extends State<AppDrawer> {
             title: 'Dashboard',
             onTap: () {
               setState(() {
-                _selectedIndex = 0; 
+                _selectedIndex = 0;
               });
               Navigator.pop(context);
             },
@@ -111,7 +78,11 @@ class _AppDrawerState extends State<AppDrawer> {
               setState(() {
                 _selectedIndex = 3;
               });
+
+              // Sign out user
               await CognitoService.signOut();
+
+              // Go to login page
               Navigator.pushReplacementNamed(context, '/');
             },
           ),
@@ -131,6 +102,71 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
+  // Professional Drawer Header
+  Widget _drawerHeader(GetxUserController user) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 48,
+        left: 20,
+        right: 20,
+        bottom: 16,
+      ),
+      decoration: const BoxDecoration(
+        color: Color(0xFFEDF8F4),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircleAvatar(
+            radius: 28,
+            backgroundColor: Colors.teal,
+            child: Icon(Icons.person, color: Colors.white),
+          ),
+
+          const SizedBox(width: 12),
+
+          // Expanded gives width so text can wrap
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Logged in as",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Obx(
+                  () => Text(
+                    user.email.value.isNotEmpty
+                        ? user.email.value
+                        : user.phone.value,
+                    softWrap: true,  
+                    maxLines: null, 
+                    overflow: TextOverflow.visible,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // Reusable drawer item
   Widget _drawerItem(
     BuildContext context, {
@@ -142,10 +178,15 @@ class _AppDrawerState extends State<AppDrawer> {
     final bool isSelected = _selectedIndex == index;
 
     return ListTile(
-      leading: Icon(icon, color: isSelected ? Colors.teal : Colors.black),
+      leading: Icon(
+        icon,
+        color: isSelected ? Colors.teal : Colors.black,
+      ),
       title: Text(
         title,
-        style: TextStyle(color: isSelected ? Colors.teal : Colors.black),
+        style: TextStyle(
+          color: isSelected ? Colors.teal : Colors.black,
+        ),
       ),
       tileColor: isSelected ? Colors.white : null,
       onTap: onTap,
