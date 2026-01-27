@@ -16,6 +16,7 @@ dependencies:
   amplify_flutter: ^1.6.1
   amplify_auth_cognito: ^1.6.1
   amplify_api: ^1.6.1
+  table_calendar: ^3.2.0 
 
 
 dev_dependencies:
@@ -25,4 +26,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/image1.png
+
 

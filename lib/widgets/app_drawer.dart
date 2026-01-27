@@ -15,7 +15,7 @@ class AppDrawer extends StatelessWidget {
     final my.DrawerController drawerController = Get.find();
 
     return Drawer(
-      backgroundColor: const Color(0xFFEDF8F4),
+      backgroundColor: const Color(0xFFF5F7F6),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -117,7 +117,7 @@ class AppDrawer extends StatelessWidget {
         bottom: 16,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFFEDF8F4),
+        color: const Color(0xFFF5F7F6),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(16),
           bottomRight: Radius.circular(16),
