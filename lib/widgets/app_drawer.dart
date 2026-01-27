@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
+import 'package:vathiyar_ai_flutter/core/storage/getXController/drawer_controller.dart'
+    as my;
 import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
+import 'package:vathiyar_ai_flutter/widgets/showYesNoDailog.dart';
 
-class AppDrawer extends StatefulWidget {
+class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
-
-  @override
-  State<AppDrawer> createState() => _AppDrawerState();
-}
-
-class _AppDrawerState extends State<AppDrawer> {
-  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final GetxUserController user = Get.find();
+    final my.DrawerController drawerController = Get.find();
 
     return Drawer(
       backgroundColor: const Color(0xFFEDF8F4),
@@ -28,63 +25,71 @@ class _AppDrawerState extends State<AppDrawer> {
           const Divider(),
 
           // Menu items
-          _drawerItem(
-            context,
-            index: 0,
-            icon: Icons.dashboard,
-            title: 'Dashboard',
-            onTap: () {
-              setState(() {
-                _selectedIndex = 0;
-              });
-              Navigator.pop(context);
-            },
+          Obx(
+            () => _drawerItem(
+              context,
+              icon: Icons.dashboard,
+              title: 'Dashboard',
+              isSelected: drawerController.selectedIndex.value == 0,
+              onTap: () {
+                drawerController.updateSelectedIndex(0);
+                Navigator.pop(context);
+              },
+            ),
           ),
 
-          _drawerItem(
-            context,
-            index: 1,
-            icon: Icons.school,
-            title: 'My Courses',
-            onTap: () {
-              setState(() {
-                _selectedIndex = 1;
-              });
-              Navigator.pop(context);
-            },
+          Obx(
+            () => _drawerItem(
+              context,
+              icon: Icons.school,
+              title: 'My Courses',
+              isSelected: drawerController.selectedIndex.value == 1,
+              onTap: () {
+                drawerController.updateSelectedIndex(1);
+                Navigator.pop(context);
+              },
+            ),
           ),
 
-          _drawerItem(
-            context,
-            index: 2,
-            icon: Icons.menu_book,
-            title: 'All Courses',
-            onTap: () {
-              setState(() {
-                _selectedIndex = 2;
-              });
-              Navigator.pop(context);
-            },
+          Obx(
+            () => _drawerItem(
+              context,
+              icon: Icons.menu_book,
+              title: 'All Courses',
+              isSelected: drawerController.selectedIndex.value == 2,
+              onTap: () {
+                drawerController.updateSelectedIndex(2);
+                Navigator.pop(context);
+              },
+            ),
           ),
 
           const Divider(),
 
-          _drawerItem(
-            context,
-            index: 3,
-            icon: Icons.logout,
-            title: 'Logout',
-            onTap: () async {
-              setState(() {
-                _selectedIndex = 3;
-              });
+          Obx(
+            () => _drawerItem(
+              context,
+              icon: Icons.logout,
+              title: 'Logout',
+              isSelected: drawerController.selectedIndex.value == 3,
+              onTap: () async {
+                final result = await showYesNoDialog(
+                  context,
+                  title: 'Logout',
+                  content: 'Are you sure you want to logout?',
+                );
 
-              // Sign out user
-              await CognitoService.signOut();
+                if (result) {
+                  drawerController.updateSelectedIndex(3);
 
-              // Go to login page
-              Navigator.pushReplacementNamed(context, '/');
-            },
+                  // Sign out user
+                  await CognitoService.signOut();
+
+                  // Go to login page
+                  Navigator.pushReplacementNamed(context, '/');
+                }
+              },
+            ),
           ),
 
           const SizedBox(height: 20),
@@ -149,8 +154,8 @@ class _AppDrawerState extends State<AppDrawer> {
                     user.email.value.isNotEmpty
                         ? user.email.value
                         : user.phone.value,
-                    softWrap: true,  
-                    maxLines: null, 
+                    softWrap: true,
+                    maxLines: null,
                     overflow: TextOverflow.visible,
                     style: const TextStyle(
                       fontSize: 14,
@@ -170,13 +175,11 @@ class _AppDrawerState extends State<AppDrawer> {
   // Reusable drawer item
   Widget _drawerItem(
     BuildContext context, {
-    required int index,
     required IconData icon,
     required String title,
     required VoidCallback onTap,
+    required bool isSelected,
   }) {
-    final bool isSelected = _selectedIndex == index;
-
     return ListTile(
       leading: Icon(
         icon,
