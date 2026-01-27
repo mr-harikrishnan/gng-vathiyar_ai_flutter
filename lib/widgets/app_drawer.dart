@@ -33,7 +33,7 @@ class AppDrawer extends StatelessWidget {
               isSelected: drawerController.selectedIndex.value == 0,
               onTap: () {
                 drawerController.updateSelectedIndex(0);
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/dashboard');
               },
             ),
           ),
@@ -46,7 +46,7 @@ class AppDrawer extends StatelessWidget {
               isSelected: drawerController.selectedIndex.value == 1,
               onTap: () {
                 drawerController.updateSelectedIndex(1);
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/mycourses');
               },
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:vathiyar_ai_flutter/core/storage/getXController/drawer_controlle
     as my;
 import 'package:vathiyar_ai_flutter/features/auth/ui/login_screen.dart';
 import 'package:vathiyar_ai_flutter/features/dashboard/ui/dashboard_screen.dart';
+import 'package:vathiyar_ai_flutter/features/my-courses/ui/my_courses_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -40,6 +41,7 @@ class _MainAppState extends State<MainApp> {
       routes: {
         "/": (context) => const LoginPage(),
         "/dashboard": (context) => Dashboard(),
+        "/mycourses":(context) => MyCoures(),
       },
 
       initialRoute: "/",
