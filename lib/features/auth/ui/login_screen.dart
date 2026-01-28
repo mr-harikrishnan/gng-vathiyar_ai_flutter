@@ -181,7 +181,7 @@ class LoginPageState extends State<LoginPage> {
                           loginValue = '+91$loginValue';
                         }
 
-                        bool success = await CognitoService. signIn(
+                        bool success = await CognitoService(). signIn(
                           context,
                           loginValue,
                           passwordController.text,
@@ -201,8 +201,6 @@ class LoginPageState extends State<LoginPage> {
                           );
 
                           if (!mounted) return;
-
-                          await CognitoService.getCognitoTokens();
 
                           Navigator.pushReplacementNamed(context, '/dashboard');
                         }

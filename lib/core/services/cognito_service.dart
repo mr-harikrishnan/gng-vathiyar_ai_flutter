@@ -29,7 +29,7 @@ class CognitoService {
   }
 
   // Login
-  static Future<bool> signIn(
+  Future<bool> signIn(
     BuildContext context,
     String email,
     String password,
@@ -43,7 +43,7 @@ class CognitoService {
 
       if (result.isSignedIn) {
         await _userController.fetchUserData();
-        await getCognitoTokens();
+        await fetchCognitoAuthSession();
       }
 
       return result.isSignedIn;
@@ -76,35 +76,47 @@ class CognitoService {
     }
   }
 
-  static Future<void> getCognitoTokens() async {
+  void safePrint(String label, String text) {
+    final int chunkSize = 800;
+    print('--- START $label ---');
+
+    // Loop through the string and print it in chunks
+    for (int i = 0; i < text.length; i += chunkSize) {
+      int end = (i + chunkSize < text.length) ? i + chunkSize : text.length;
+      print(text.substring(i, end));
+    }
+
+    print('--- END $label ---');
+  }
+
+  // Get Cognito tokens
+  Future<void> fetchCognitoAuthSession() async {
     try {
-      final result = await Amplify.Auth.fetchAuthSession(
-        options: const FetchAuthSessionOptions(),
+      final cognitoPlugin = Amplify.Auth.getPlugin(
+        AmplifyAuthCognito.pluginKey,
       );
-      final cognitoSession = result as CognitoAuthSession;
+      final result = await cognitoPlugin.fetchAuthSession();
 
-      if (cognitoSession.isSignedIn) {
-        final userPoolTokens = cognitoSession.userPoolTokensResult.value;
-      
-        final AccessToken = userPoolTokens.accessToken.raw;
-        final RefreshToken = userPoolTokens.refreshToken;
-        final IdToken = userPoolTokens.idToken.raw;
+      // Get tokens
+      final accessToken = result.userPoolTokensResult.value.accessToken.raw;
+      final idToken = result.userPoolTokensResult.value.idToken.raw;
+      final refreshToken = result.userPoolTokensResult.value.refreshToken;
 
-        print("----------------------------------------");
-        print('AccessToken: $AccessToken');
-        writeSecureData("AccessToken", AccessToken);
-
-        print("---------------------------------------");
-        print('RefreshToken: $RefreshToken');
-        writeSecureData("RefreshToken", RefreshToken);
-
-        print("----------------------------------------");
-        print('IdToken: $IdToken');
-        writeSecureData("IdToken", IdToken);
-
+      // Store tokens
+      await writeSecureData('accessToken', accessToken);
+      await writeSecureData('idToken', idToken);
+      if (refreshToken != null) {
+        await writeSecureData('refreshToken', refreshToken);
       }
-    } on AuthException catch (e) {
-      print('Error fetching auth session: ${e.message}');
+
+      // --- USE THE SAFE PRINT FUNCTION HERE ---
+      safePrint("ACCESS TOKEN", accessToken);
+      safePrint("ID TOKEN", idToken);
+      if (refreshToken != null) {
+        safePrint("REFRESH TOKEN", refreshToken);
+      }
+    } catch (e) {
+      print('Error retrieving auth session: $e');
     }
   }
 }
