@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class Dropdown extends StatefulWidget {
   final List<String> languages;
   final Function(String?)? onChanged;
+  final bool loading;
 
-  const Dropdown({super.key, required this.languages, this.onChanged});
+  const Dropdown(
+      {super.key,
+      required this.languages,
+      this.onChanged,
+      this.loading = false});
 
   @override
   State<Dropdown> createState() => _DropdownState();
@@ -14,10 +19,18 @@ class _DropdownState extends State<Dropdown> {
   String? selectedValue;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.languages.isNotEmpty) {
+      selectedValue = widget.languages.first;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       // This gives left and right gap to the FULL widget
-    
+
       child: DropdownButtonFormField<String>(
         value: selectedValue,
         hint: const Text('All Languages'),
@@ -34,26 +47,35 @@ class _DropdownState extends State<Dropdown> {
           );
         }).toList(),
 
-        onChanged: (value) {
-          setState(() {
-            selectedValue = value;
-          });
-          if (widget.onChanged != null) {
-            widget.onChanged!(value);
-          }
-        },
+        onChanged: widget.loading
+            ? null
+            : (value) {
+                setState(() {
+                  selectedValue = value;
+                });
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
+              },
 
-        icon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            SizedBox(
-              height: 24,
-              child: VerticalDivider(thickness: 1, color: Colors.grey),
-            ),
-            SizedBox(width: 8),
-            Icon(Icons.keyboard_arrow_down),
-          ],
-        ),
+        icon: widget.loading
+            ? Container(
+                width: 20,
+                height: 20,
+                margin: const EdgeInsets.only(right: 12),
+                child: const CircularProgressIndicator(strokeWidth: 2),
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  SizedBox(
+                    height: 24,
+                    child: VerticalDivider(thickness: 1, color: Colors.grey),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.keyboard_arrow_down),
+                ],
+              ),
 
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(

@@ -98,21 +98,15 @@ class MyCoursesScreenState extends State<MyCoures> {
               style: TextStyle(fontSize: 23),
             ),
             const SizedBox(height: 6),
-
-            // Loader
-            _loading
-                ? const CircularProgressIndicator()
-
-                // Dropdown
-                : Dropdown(
-                    languages: _languages,
-                    onChanged:
-                        (String? newValue) {
-                      print(
-                        "Selected language: $newValue",
-                      );
-                    },
-                  ),
+            Dropdown(
+              languages: _languages,
+              onChanged: (String? newValue) {
+                print(
+                  "Selected language: $newValue",
+                );
+              },
+              loading: _loading,
+            ),
           ],
         ),
       ),
