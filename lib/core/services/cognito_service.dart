@@ -39,10 +39,10 @@ class CognitoService {
         username: email,
         password: password,
       );
-      print("signIn user data...  $result");
 
       if (result.isSignedIn) {
         await _userController.fetchUserData();
+        await getCognitoTokens();
       }
 
       return result.isSignedIn;
@@ -84,14 +84,19 @@ class CognitoService {
 
       if (cognitoSession.isSignedIn) {
         final userPoolTokens = cognitoSession.userPoolTokensResult.value;
-
-        final accessToken = userPoolTokens.accessToken;
+      
+        final accessToken = userPoolTokens.accessToken.raw;
         final refreshToken = userPoolTokens.refreshToken;
-        final idToken = userPoolTokens.idToken;
+        final idToken = userPoolTokens.idToken.raw;
 
+        print("----------------------------------------");
         print('Access Token: $accessToken');
+        print("---------------------------------------");
         print('Refresh Token: $refreshToken');
+        print("----------------------------------------");
         print('ID Token: $idToken');
+        print("----------------------------------------");
+
       }
     } on AuthException catch (e) {
       print('Error fetching auth session: ${e.message}');
