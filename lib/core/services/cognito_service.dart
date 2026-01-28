@@ -105,16 +105,13 @@ class CognitoService {
       // Store tokens
       await writeSecureData('accessToken', accessToken);
       await writeSecureData('idToken', idToken);
-      if (refreshToken != null) {
-        await writeSecureData('refreshToken', refreshToken);
-      }
+      await writeSecureData('refreshToken', refreshToken);
 
       // --- USE THE SAFE PRINT FUNCTION HERE ---
       safePrint("ACCESS TOKEN", accessToken);
       safePrint("ID TOKEN", idToken);
-      if (refreshToken != null) {
-        safePrint("REFRESH TOKEN", refreshToken);
-      }
+      safePrint("REFRESH TOKEN", refreshToken);
+      
     } catch (e) {
       print('Error retrieving auth session: $e');
     }
