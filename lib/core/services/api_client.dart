@@ -10,7 +10,7 @@ class ApiClient {
   // Build headers
   Future<Map<String, String>> _headers() async {
     final token = await readSecureData("AcessToken");
-
+    print("Auth Token: $token");
     return {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",
@@ -22,12 +22,19 @@ class ApiClient {
     final uri = Uri.parse(
       ApiConstants.baseUrl + endpoint,
     ).replace(queryParameters: query);
-
-    final response = await http.get(uri, headers: await _headers());
-
+    print("Request URL: $uri");
+    final headers = await _headers();
+    print("Request Headers: $headers");
+    final response = await http.get(uri, headers: headers);
+    print("Response Status Code: ${response.statusCode}");
+    print("Response Body: ${response.body}");
     // Check status
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      try {
+        return jsonDecode(response.body);
+      } catch (e) {
+        throw Exception("JSON Decode Failed: $e");
+      }
     } else {
       throw Exception("GET Failed: ${response.statusCode}");
     }
