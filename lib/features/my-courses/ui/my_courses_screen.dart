@@ -1,3 +1,5 @@
+// lib/features/my-courses/ui/my_courses.dart
+
 import 'package:flutter/material.dart';
 
 import 'package:vathiyar_ai_flutter/api/languages/language_service.dart';
@@ -5,28 +7,24 @@ import 'package:vathiyar_ai_flutter/api/languages/language_model.dart';
 
 import 'package:vathiyar_ai_flutter/widgets/app_drawer.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop_down.dart';
+import 'package:vathiyar_ai_flutter/widgets/search-bar.dart';
 
 class MyCoures extends StatefulWidget {
   const MyCoures({super.key});
 
   @override
-  State<MyCoures> createState() {
-    return MyCoursesScreenState();
-  }
+  State<MyCoures> createState() => MyCoursesScreenState();
 }
 
 class MyCoursesScreenState extends State<MyCoures> {
   // Service
-  final LanguageService _service =
-      LanguageService();
+  final LanguageService _service = LanguageService();
 
   // Models
   List<LanguageModel> _languageModels = [];
 
   // Dropdown values
-  List<String> _languages = [
-    "All Languages"
-  ];
+  List<String> _languages = ["All Languages"];
 
   bool _loading = true;
 
@@ -41,23 +39,20 @@ class MyCoursesScreenState extends State<MyCoures> {
   // Load from API
   Future<void> _loadLanguages() async {
     try {
-      final result =
-          await _service.getLanguages();
+      final result = await _service.getLanguages();
 
-      // Print full API data in console
+      // Print API data
       for (var lang in result) {
-        print(
-          "ID: ${lang.id}, Name: ${lang.name}, Code: ${lang.code}",
-        );
+        print("ID: ${lang.id}, Name: ${lang.name}, Code: ${lang.code}");
       }
 
       setState(() {
         _languageModels = result;
 
-        // Clear and add default
+        // Reset list
         _languages = ["All Languages"];
 
-        // Add names to dropdown list
+        // Add API values
         for (var lang in _languageModels) {
           _languages.add(lang.name);
         }
@@ -73,6 +68,21 @@ class MyCoursesScreenState extends State<MyCoures> {
     }
   }
 
+  // Search filter
+  void _onSearch(String text) {
+    print("Search: $text");
+
+    setState(() {
+      _languages = ["All Languages"];
+
+      for (var lang in _languageModels) {
+        if (lang.name.toLowerCase().contains(text.toLowerCase())) {
+          _languages.add(lang.name);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,33 +90,31 @@ class MyCoursesScreenState extends State<MyCoures> {
         backgroundColor: const Color(0xFFF5F7F6),
         title: const Text(
           "My Courses",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ),
       drawer: const AppDrawer(),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "In-Progress",
-              style: TextStyle(fontSize: 23),
-            ),
-            const SizedBox(height: 6),
+            const Text("In-Progress", style: TextStyle(fontSize: 23)),
+            const SizedBox(height: 10),
+
+            // Dropdown
             Dropdown(
               languages: _languages,
-              onChanged: (String? newValue) {
-                print(
-                  "Selected language: $newValue",
-                );
-              },
               loading: _loading,
+              onChanged: (value) {
+                print("Selected language: $value");
+              },
             ),
+
+            const SizedBox(height: 10),
+            
+            // Search bar
+            SearchBarWidget(loading: _loading, onChanged: _onSearch),
           ],
         ),
       ),
