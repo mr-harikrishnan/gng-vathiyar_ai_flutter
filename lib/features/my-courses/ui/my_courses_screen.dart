@@ -6,6 +6,7 @@ import 'package:vathiyar_ai_flutter/api/languages/language_service.dart';
 import 'package:vathiyar_ai_flutter/api/languages/language_model.dart';
 
 import 'package:vathiyar_ai_flutter/widgets/app_drawer.dart';
+import 'package:vathiyar_ai_flutter/widgets/course_card.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop_down.dart';
 import 'package:vathiyar_ai_flutter/widgets/search-bar.dart';
 
@@ -31,20 +32,13 @@ class MyCoursesScreenState extends State<MyCoures> {
   @override
   void initState() {
     super.initState();
-
-    // Call API when screen opens
-    _loadLanguages();
+    _loadLanguages(); // Call API when screen opens
   }
 
   // Load from API
   Future<void> _loadLanguages() async {
     try {
       final result = await _service.getLanguages();
-
-      // Print API data
-      for (var lang in result) {
-        print("ID: ${lang.id}, Name: ${lang.name}, Code: ${lang.code}");
-      }
 
       setState(() {
         _languageModels = result;
@@ -61,7 +55,6 @@ class MyCoursesScreenState extends State<MyCoures> {
       });
     } catch (e) {
       print("API Error: $e");
-
       setState(() {
         _loading = false;
       });
@@ -70,8 +63,6 @@ class MyCoursesScreenState extends State<MyCoures> {
 
   // Search filter
   void _onSearch(String text) {
-    print("Search: $text");
-
     setState(() {
       _languages = ["All Languages"];
 
@@ -87,7 +78,7 @@ class MyCoursesScreenState extends State<MyCoures> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F7F6),
+        
         title: const Text(
           "My Courses",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
@@ -95,15 +86,21 @@ class MyCoursesScreenState extends State<MyCoures> {
       ),
       drawer: const AppDrawer(),
       body: Container(
+        color: const Color(0xFFF5F7F6),
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("In-Progress", style: TextStyle(fontSize: 23)),
+            const Text(
+              "In-Progress",
+              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600),
+            ),
+
             const SizedBox(height: 10),
 
             // Dropdown
             Dropdown(
+              
               languages: _languages,
               loading: _loading,
               onChanged: (value) {
@@ -112,9 +109,23 @@ class MyCoursesScreenState extends State<MyCoures> {
             ),
 
             const SizedBox(height: 10),
-            
+
             // Search bar
             SearchBarWidget(loading: _loading, onChanged: _onSearch),
+
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: ListView.builder(
+                
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                    child: CourseCard(),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

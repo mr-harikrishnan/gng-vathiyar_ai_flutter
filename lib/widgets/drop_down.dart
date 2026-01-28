@@ -30,7 +30,7 @@ class _DropdownState extends State<Dropdown> {
   Widget build(BuildContext context) {
     return Container(
       // This gives left and right gap to the FULL widget
-
+      color: Colors.white,
       child: DropdownButtonFormField<String>(
         value: selectedValue,
         hint: const Text('All Languages'),
