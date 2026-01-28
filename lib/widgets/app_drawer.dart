@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
-import 'package:vathiyar_ai_flutter/core/storage/getXController/drawer_controller.dart'
-    as my;
 import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
 import 'package:vathiyar_ai_flutter/widgets/showYesNoDailog.dart';
 
@@ -12,7 +10,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GetxUserController user = Get.find();
-    final my.DrawerController drawerController = Get.find();
+    final String? currentRoute = ModalRoute.of(context)?.settings.name;
 
     return Drawer(
       backgroundColor: const Color(0xFFF5F7F6),
@@ -25,71 +23,62 @@ class AppDrawer extends StatelessWidget {
           const Divider(),
 
           // Menu items
-          Obx(
-            () => _drawerItem(
-              context,
-              icon: Icons.dashboard,
-              title: 'Dashboard',
-              isSelected: drawerController.selectedIndex.value == 0,
-              onTap: () {
-                drawerController.updateSelectedIndex(0);
-                Navigator.pushReplacementNamed(context, '/dashboard');
-              },
-            ),
+          _drawerItem(
+            context,
+            icon: Icons.dashboard,
+            title: 'Dashboard',
+            route: '/dashboard',
+            currentRoute: currentRoute,
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/dashboard');
+            },
           ),
 
-          Obx(
-            () => _drawerItem(
-              context,
-              icon: Icons.school,
-              title: 'My Courses',
-              isSelected: drawerController.selectedIndex.value == 1,
-              onTap: () {
-                drawerController.updateSelectedIndex(1);
-                Navigator.pushReplacementNamed(context, '/mycourses');
-              },
-            ),
+          _drawerItem(
+            context,
+            icon: Icons.school,
+            title: 'My Courses',
+            route: '/mycourses',
+            currentRoute: currentRoute,
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/mycourses');
+            },
           ),
 
-          Obx(
-            () => _drawerItem(
-              context,
-              icon: Icons.menu_book,
-              title: 'All Courses',
-              isSelected: drawerController.selectedIndex.value == 2,
-              onTap: () {
-                drawerController.updateSelectedIndex(2);
-                Navigator.pop(context);
-              },
-            ),
+          _drawerItem(
+            context,
+            icon: Icons.menu_book,
+            title: 'All Courses',
+            route: '/allcourses',
+            currentRoute: currentRoute,
+            onTap: () {
+              // Navigator.pushReplacementNamed(context, '/allcourses');
+            },
           ),
 
           const Divider(),
 
-          Obx(
-            () => _drawerItem(
-              context,
-              icon: Icons.logout,
-              title: 'Logout',
-              isSelected: drawerController.selectedIndex.value == 3,
-              onTap: () async {
-                final result = await showYesNoDialog(
-                  context,
-                  title: 'Logout',
-                  content: 'Are you sure you want to logout?',
-                );
+          _drawerItem(
+            context,
+            icon: Icons.logout,
+            title: 'Logout',
+            route: '/',
+            currentRoute: currentRoute,
+            onTap: () async {
+              final result = await showYesNoDialog(
+                context,
+                title: 'Logout',
+                content: 'Are you sure you want to logout?',
+              );
 
-                if (result) {
-                  drawerController.updateSelectedIndex(3);
+              if (result) {
+                // Sign out user
+                await CognitoService.signOut();
 
-                  // Sign out user
-                  await CognitoService.signOut();
-
-                  // Go to login page
-                  Navigator.pushReplacementNamed(context, '/');
-                }
-              },
-            ),
+                // Go to login page
+                Navigator.pushReplacementNamed(context, '/');
+              }
+            },
           ),
 
           const SizedBox(height: 20),
@@ -178,20 +167,20 @@ class AppDrawer extends StatelessWidget {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
-    required bool isSelected,
+    required String? currentRoute,
+    required String route,
   }) {
     return ListTile(
       leading: Icon(
         icon,
-        color: isSelected ? Colors.teal : Colors.black,
+        color: Colors.black,
       ),
       title: Text(
         title,
-        style: TextStyle(
-          color: isSelected ? Colors.teal : Colors.black,
+        style: const TextStyle(
+          color: Colors.black,
         ),
       ),
-      tileColor: isSelected ? Colors.white : null,
       onTap: onTap,
     );
   }
