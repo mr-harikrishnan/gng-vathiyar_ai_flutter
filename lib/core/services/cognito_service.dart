@@ -3,6 +3,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
 import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
+import 'package:vathiyar_ai_flutter/core/storage/secureStorage/secure_storage.dart';
 import 'package:vathiyar_ai_flutter/widgets/show_pop.dart';
 import '../../amplifyconfiguration.dart';
 
@@ -85,17 +86,21 @@ class CognitoService {
       if (cognitoSession.isSignedIn) {
         final userPoolTokens = cognitoSession.userPoolTokensResult.value;
       
-        final accessToken = userPoolTokens.accessToken.raw;
-        final refreshToken = userPoolTokens.refreshToken;
-        final idToken = userPoolTokens.idToken.raw;
+        final AccessToken = userPoolTokens.accessToken.raw;
+        final RefreshToken = userPoolTokens.refreshToken;
+        final IdToken = userPoolTokens.idToken.raw;
 
         print("----------------------------------------");
-        print('Access Token: $accessToken');
+        print('AccessToken: $AccessToken');
+        writeSecureData("AccessToken", AccessToken);
+
         print("---------------------------------------");
-        print('Refresh Token: $refreshToken');
+        print('RefreshToken: $RefreshToken');
+        writeSecureData("RefreshToken", RefreshToken);
+
         print("----------------------------------------");
-        print('ID Token: $idToken');
-        print("----------------------------------------");
+        print('IdToken: $IdToken');
+        writeSecureData("IdToken", IdToken);
 
       }
     } on AuthException catch (e) {
