@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final Function(String)? onChanged;
-  final bool loading;
 
-  const SearchBarWidget({super.key, this.onChanged, this.loading = false});
+  const SearchBarWidget({super.key, this.onChanged});
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -46,7 +45,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           vertical: 14,
         ),
 
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.grey),
@@ -56,15 +57,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           borderSide: const BorderSide(color: Color(0xFF009688), width: 2),
         ),
 
-        // Icon before text
-        prefixIcon: widget.loading
-            ? Container(
-                width: 20,
-                height: 20,
-                margin: const EdgeInsets.only(left: 12, right: 8),
-                child: const CircularProgressIndicator(strokeWidth: 2),
-              )
-            : const Icon(Icons.search),
+        // Static search icon
+        prefixIcon: const Icon(Icons.search),
       ),
     );
   }

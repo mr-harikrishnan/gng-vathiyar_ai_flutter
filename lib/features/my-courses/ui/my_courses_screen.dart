@@ -33,7 +33,6 @@ class MyCoursesScreenState extends State<MyCoures> {
   String _searchQuery = "";
 
   // Loading flags
-  bool _loadingLanguages = true;
   bool _loadingCourses = true;
 
   // Debounce timer
@@ -64,7 +63,6 @@ class MyCoursesScreenState extends State<MyCoures> {
   // ----------------------------
   Future<void> _loadLanguages() async {
     setState(() {
-      _loadingLanguages = true;
     });
 
     try {
@@ -79,12 +77,10 @@ class MyCoursesScreenState extends State<MyCoures> {
       setState(() {
         // Show only names in dropdown
         _languages = ["All Languages", ..._languageMap.keys];
-        _loadingLanguages = false;
       });
     } catch (e) {
       print("API Error (Languages): $e");
       setState(() {
-        _loadingLanguages = false;
       });
     }
   }
@@ -162,7 +158,6 @@ class MyCoursesScreenState extends State<MyCoures> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoading = _loadingLanguages || _loadingCourses;
 
     return Scaffold(
       appBar: AppBar(
@@ -188,13 +183,12 @@ class MyCoursesScreenState extends State<MyCoures> {
             Dropdown(
               value: _selectedLanguage,
               languages: _languages,
-              loading: _loadingLanguages,
               onChanged: _onLanguageChanged,
             ),
             const SizedBox(height: 10),
 
             // Search bar
-            SearchBarWidget(loading: isLoading, onChanged: _onSearchChanged),
+            SearchBarWidget(onChanged: _onSearchChanged),
             const SizedBox(height: 20),
 
             // Course list
