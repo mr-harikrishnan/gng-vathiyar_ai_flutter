@@ -1,13 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/api/my-courses/my-courses_api.dart';
 
 class CourseCard extends StatefulWidget {
-  const CourseCard({super.key});
+  final CourseModel course;
+  const CourseCard({super.key, required this.course});
 
   @override
   State<CourseCard> createState() => CourseCardState();
 }
 
 class CourseCardState extends State<CourseCard> {
+  String _formatDuration(int minutes) {
+    final hours = minutes ~/ 60;
+    final remainingMinutes = minutes % 60;
+    return "${hours}Hr ${remainingMinutes}min";
+  }
+
+  String _formatUpdatedAt(String dateString) {
+    try {
+      final dateTime = DateTime.parse(dateString);
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+      final month = months[dateTime.month - 1];
+      final day = dateTime.day;
+      final year = dateTime.year;
+      final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+      final minute = dateTime.minute.toString().padLeft(2, '0');
+      final ampm = dateTime.hour >= 12 ? "PM" : "AM";
+
+      return "Last updated at $month ${day}th, $year $hour:$minute $ampm";
+    } catch (e) {
+      return "Last updated at $dateString";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +66,7 @@ class CourseCardState extends State<CourseCard> {
             child: Stack(
               children: [
                 Image.network(
-                  "https://cdn.appbuild.pro/course/thumbnail/fe7c76ce-0205-454b-a5cb-adfda1f70f2e.png",
+                  "https://cdn.appbuild.pro/${widget.course.thumbnailImage}",
                   height: 160,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -56,11 +94,14 @@ class CourseCardState extends State<CourseCard> {
                       color: Colors.white.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(Icons.access_time, size: 14),
-                        SizedBox(width: 4),
-                        Text("0Hr 50min", style: TextStyle(fontSize: 12)),
+                        const Icon(Icons.access_time, size: 14),
+                        const SizedBox(width: 4),
+                        Text(
+                          _formatDuration(widget.course.courseDuration),
+                          style: const TextStyle(fontSize: 12),
+                        ),
                       ],
                     ),
                   ),
@@ -72,17 +113,17 @@ class CourseCardState extends State<CourseCard> {
           const SizedBox(height: 12),
 
           // Title
-          const Text(
-            "No Bag Day",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          Text(
+            widget.course.title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
           // Subtitle
-          const Text(
-            "Planning and Organising 'No Bag Day'",
-            style: TextStyle(fontSize: 13, color: Colors.grey),
+          Text(
+            widget.course.subTitle,
+            style: const TextStyle(fontSize: 13, color: Colors.grey),
           ),
 
           const SizedBox(height: 12),
@@ -91,17 +132,21 @@ class CourseCardState extends State<CourseCard> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Row(
                 children: [
-                  Icon(Icons.pie_chart, size: 16, color: Color(0xFF009688)),
-                  SizedBox(width: 4),
-                  Text("19% COMPLETED", style: TextStyle(fontSize: 12)),
+                  const Icon(Icons.pie_chart,
+                      size: 16, color: Color(0xFF009688)),
+                  const SizedBox(width: 4),
+                  Text(
+                    "${widget.course.completionPercent}% COMPLETED",
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ],
               ),
               Text(
-                "Last updated at March 25th, 2025 11:18 AM",
-                style: TextStyle(fontSize: 10, color: Colors.grey),
+                _formatUpdatedAt(widget.course.updatedAt),
+                style: const TextStyle(fontSize: 10, color: Colors.grey),
               ),
             ],
           ),

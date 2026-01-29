@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vathiyar_ai_flutter/core/storage/secureStorage/secure_storage.dart';
 
-class ApiService {
+class GetlanguagesApiService {
   static const String _baseUrl = "https://devapi.appbuild.pro";
 
   // GET /languages

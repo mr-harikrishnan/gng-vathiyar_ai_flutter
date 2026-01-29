@@ -4,35 +4,27 @@ class Dropdown extends StatefulWidget {
   final List<String> languages;
   final Function(String?)? onChanged;
   final bool loading;
+  final String? value;
 
   const Dropdown(
       {super.key,
       required this.languages,
       this.onChanged,
-      this.loading = false});
+      this.loading = false,
+      this.value});
 
   @override
   State<Dropdown> createState() => _DropdownState();
 }
 
 class _DropdownState extends State<Dropdown> {
-  String? selectedValue;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.languages.isNotEmpty) {
-      selectedValue = widget.languages.first;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       // This gives left and right gap to the FULL widget
       color: Colors.white,
       child: DropdownButtonFormField<String>(
-        value: selectedValue,
+        value: widget.value,
         hint: const Text('All Languages'),
         isExpanded: true, // Makes dropdown full width
 
@@ -47,16 +39,7 @@ class _DropdownState extends State<Dropdown> {
           );
         }).toList(),
 
-        onChanged: widget.loading
-            ? null
-            : (value) {
-                setState(() {
-                  selectedValue = value;
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(value);
-                }
-              },
+        onChanged: widget.loading ? null : widget.onChanged,
 
         icon: widget.loading
             ? Container(
