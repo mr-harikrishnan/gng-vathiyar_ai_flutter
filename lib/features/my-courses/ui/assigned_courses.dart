@@ -4,6 +4,7 @@ import 'package:vathiyar_ai_flutter/api/get-languages/get-languages_api.dart';
 import 'package:vathiyar_ai_flutter/api/my-courses/my-courses_api.dart';
 import 'package:vathiyar_ai_flutter/widgets/course_card.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop_down.dart';
+import 'package:vathiyar_ai_flutter/widgets/horizontal_tab_bar.dart';
 import 'package:vathiyar_ai_flutter/widgets/search-bar.dart';
 
 class AssignedCourses extends StatefulWidget {
@@ -175,7 +176,18 @@ class AssignedCoursesState extends State<AssignedCourses> {
 
           const SizedBox(height: 20),
 
-          Text("Catogery"),
+          HorizontalTabBar(
+            tabs: const [
+              "Understanding Learner",
+              "Assessment & Feedback",
+              "Engagement",
+              "Progress",
+            ],
+            onChanged: (index) {
+              // This runs when tab changes
+              print("Selected tab: $index");
+            },
+          ),
 
           const SizedBox(height: 20),
 
