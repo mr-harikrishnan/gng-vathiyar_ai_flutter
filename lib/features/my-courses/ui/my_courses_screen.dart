@@ -23,6 +23,7 @@ class MyCoursesScreenState extends State<MyCoures> {
   // Dropdown values
   List<String> _languages = ["All Languages"];
 
+  // Loading flag
   bool _loading = true;
 
   @override
@@ -47,12 +48,12 @@ class MyCoursesScreenState extends State<MyCoures> {
           _languages.add(lang.name);
         }
 
-        _loading = false;
+        _loading = false; // Stop loading when data comes
       });
     } catch (e) {
       print("API Error: $e");
       setState(() {
-        _loading = false;
+        _loading = false; // Stop loading even on error
       });
     }
   }
@@ -74,7 +75,6 @@ class MyCoursesScreenState extends State<MyCoures> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         title: const Text(
           "My Courses",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
@@ -84,46 +84,48 @@ class MyCoursesScreenState extends State<MyCoures> {
       body: Container(
         color: const Color(0xFFF5F7F6),
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "In-Progress",
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600),
-            ),
 
-            const SizedBox(height: 10),
+        // Show loader before data comes
+        child: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "In-Progress",
+                    style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600),
+                  ),
 
-            // Dropdown
-            Dropdown(
-              
-              languages: _languages,
-              loading: _loading,
-              onChanged: (value) {
-                print("Selected language: $value");
-              },
-            ),
+                  const SizedBox(height: 10),
 
-            const SizedBox(height: 10),
+                  // Dropdown
+                  Dropdown(
+                    languages: _languages,
+                    loading: _loading,
+                    onChanged: (value) {
+                      print("Selected language: $value");
+                    },
+                  ),
 
-            // Search bar
-            SearchBarWidget(loading: _loading, onChanged: _onSearch),
+                  const SizedBox(height: 10),
 
-            const SizedBox(height: 20),
+                  // Search bar
+                  SearchBarWidget(loading: _loading, onChanged: _onSearch),
 
-            Expanded(
-              child: ListView.builder(
-                
-                itemBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                    child: CourseCard(),
-                  );
-                },
+                  const SizedBox(height: 20),
+
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return const Padding(
+                          padding: EdgeInsets.only(bottom: 12),
+                          child: CourseCard(),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

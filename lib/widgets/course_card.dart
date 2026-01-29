@@ -28,7 +28,7 @@ class CourseCardState extends State<CourseCard> {
             child: Stack(
               children: [
                 Image.network(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-QQJ8abcWa_d3RVAYnS3SI__zSi6sBTBeuQ&s",
+                  "https://cdn.appbuild.pro/course/thumbnail/fe7c76ce-0205-454b-a5cb-adfda1f70f2e.png",
                   height: 160,
                   width: double.infinity,
                   fit: BoxFit.cover,
