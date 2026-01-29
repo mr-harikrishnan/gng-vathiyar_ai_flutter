@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:vathiyar_ai_flutter/api/languages/language_service.dart';
-import 'package:vathiyar_ai_flutter/api/languages/language_model.dart';
+import 'package:vathiyar_ai_flutter/api/get-languages/get-languages.dart';
 
 import 'package:vathiyar_ai_flutter/widgets/app_drawer.dart';
 import 'package:vathiyar_ai_flutter/widgets/course_card.dart';
@@ -18,9 +17,6 @@ class MyCoures extends StatefulWidget {
 }
 
 class MyCoursesScreenState extends State<MyCoures> {
-  // Service
-  final LanguageService _service = LanguageService();
-
   // Models
   List<LanguageModel> _languageModels = [];
 
@@ -38,7 +34,7 @@ class MyCoursesScreenState extends State<MyCoures> {
   // Load from API
   Future<void> _loadLanguages() async {
     try {
-      final result = await _service.getLanguages();
+      final result = await ApiService.getLanguages();
 
       setState(() {
         _languageModels = result;
