@@ -8,8 +8,8 @@ class GetMyCoursesApiService {
   // GET /my-courses
   static Future<List<CourseModel>> getMyCourses({
     required String status ,
-    String? searchKey,      // Search input
-    String? lang,          // Language from dropdown
+    String? searchKey,
+    String? lang,          
     String sortingDirection = "desc",
     int pageSize = 8,
     int pageNumber = 1,
@@ -26,12 +26,10 @@ class GetMyCoursesApiService {
       "orderByPropertyName": orderByPropertyName,
     };
 
-    // Add language only if selected in dropdown
     if (lang != null && lang.isNotEmpty) {
       queryParams["lang"] = lang;
     }
 
-    // Add search only if user typed something
     if (searchKey != null && searchKey.isNotEmpty) {
       queryParams["searchKey"] = searchKey;
     }

@@ -15,12 +15,19 @@ class MyCoures extends StatefulWidget {
 }
 
 class MyCoursesScreenState extends State<MyCoures> {
-  // Data list
+  // ----------------------------
+  // DATA
+  // ----------------------------
+
+  // Course list
   List<CourseModel> _courseModels = [];
 
-  // Dropdown values
+  // Dropdown list (names only)
   List<String> _languages = ["All Languages"];
   String _selectedLanguage = "All Languages";
+
+  // Name -> Code map
+  Map<String, String> _languageMap = {};
 
   // Search text
   String _searchQuery = "";
@@ -29,7 +36,7 @@ class MyCoursesScreenState extends State<MyCoures> {
   bool _loadingLanguages = true;
   bool _loadingCourses = true;
 
-  // Debounce for search
+  // Debounce timer
   Timer? _debounce;
 
   @override
@@ -44,6 +51,9 @@ class MyCoursesScreenState extends State<MyCoures> {
     super.dispose();
   }
 
+  // ----------------------------
+  // INITIAL LOAD
+  // ----------------------------
   Future<void> _loadInitialData() async {
     await _loadLanguages();
     await _loadCourses();
@@ -60,8 +70,15 @@ class MyCoursesScreenState extends State<MyCoures> {
     try {
       final result = await GetlanguagesApiService.getLanguages();
 
+      // Build name -> code map
+      _languageMap = {for (var e in result) e.name: e.code};
+
+      // Debug print
+      print("Languages Map: $_languageMap");
+
       setState(() {
-        _languages = ["All Languages", ...result.map((e) => e.name)];
+        // Show only names in dropdown
+        _languages = ["All Languages", ..._languageMap.keys];
         _loadingLanguages = false;
       });
     } catch (e) {
@@ -80,13 +97,14 @@ class MyCoursesScreenState extends State<MyCoures> {
       _loadingCourses = true;
     });
 
-    // Send lang only if dropdown is not "All Languages"
+    // Convert selected name -> code
     String? langParam;
     if (_selectedLanguage != "All Languages") {
-      langParam = _selectedLanguage;
+      langParam = _languageMap[_selectedLanguage];
+      // Example: "English" -> "en"
     }
 
-    // Send search only if user typed
+    // Search param
     String? searchParam;
     if (_searchQuery.isNotEmpty) {
       searchParam = _searchQuery;
@@ -95,8 +113,8 @@ class MyCoursesScreenState extends State<MyCoures> {
     try {
       final result = await GetMyCoursesApiService.getMyCourses(
         status: "IN_PROGRESS",
-        lang: langParam, // Language filter
-        searchKey: searchParam, // Search filter
+        lang: langParam, // Send code to API
+        searchKey: searchParam,
       );
 
       setState(() {
@@ -121,7 +139,8 @@ class MyCoursesScreenState extends State<MyCoures> {
       _selectedLanguage = newValue;
     });
 
-    _loadCourses(); // Reload courses when language changes
+    // Reload courses
+    _loadCourses();
   }
 
   // ----------------------------
