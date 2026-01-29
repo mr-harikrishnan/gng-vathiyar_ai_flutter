@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-languages/get-languages_api.dart';
-import 'package:vathiyar_ai_flutter/api/my-courses/my-courses_api.dart';
+import 'package:vathiyar_ai_flutter/api/my-courses/in_progress/in_progress_api.dart';
 import 'package:vathiyar_ai_flutter/widgets/course_card.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop_down.dart';
 import 'package:vathiyar_ai_flutter/widgets/search-bar.dart';

@@ -1,7 +1,10 @@
+// lib/features/assigned-courses/assigned_courses.dart
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-languages/get-languages_api.dart';
-import 'package:vathiyar_ai_flutter/api/my-courses/my-courses_api.dart';
+import 'package:vathiyar_ai_flutter/api/my-courses/assigned_courses/get_categories_api.dart';
+import 'package:vathiyar_ai_flutter/api/my-courses/in_progress/in_progress_api.dart';
 import 'package:vathiyar_ai_flutter/widgets/course_card.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop_down.dart';
 import 'package:vathiyar_ai_flutter/widgets/horizontal_tab_bar.dart';
@@ -15,19 +18,24 @@ class AssignedCourses extends StatefulWidget {
 }
 
 class AssignedCoursesState extends State<AssignedCourses> {
-  // ----------------------------
-  // DATA
-  // ----------------------------
+  //Data
 
-  // Course list
+  List<String> _languages = ["All Languages"];
+
+  List<String> _categories = [];
+
   List<CourseModel> _courseModels = [];
 
-  // Dropdown list (names only)
-  List<String> _languages = ["All Languages"];
+  // Selected filters
+
+  String? _selectedCategory;
+
   String _selectedLanguage = "All Languages";
 
-  // Name -> Code map
+  // Naps
   Map<String, String> _languageMap = {};
+
+  Map<String, String> _categoriesMap = {};
 
   // Search text
   String _searchQuery = "";
@@ -50,55 +58,65 @@ class AssignedCoursesState extends State<AssignedCourses> {
     super.dispose();
   }
 
-  // ----------------------------
   // INITIAL LOAD
-  // ----------------------------
+
   Future<void> _loadInitialData() async {
     await _loadLanguages();
+    await _loadCategories();
     await _loadCourses();
   }
 
-  // ----------------------------
   // LOAD LANGUAGES
-  // ----------------------------
-  Future<void> _loadLanguages() async {
-    setState(() {});
 
+  Future<void> _loadLanguages() async {
     try {
       final result = await GetlanguagesApiService.getLanguages();
 
-      // Build name -> code map
       _languageMap = {for (var e in result) e.name: e.code};
 
-      // Debug print
-      print("Languages Map: $_languageMap");
-
       setState(() {
-        // Show only names in dropdown
         _languages = ["All Languages", ..._languageMap.keys];
       });
     } catch (e) {
-      print("API Error (Languages): $e");
-      setState(() {});
+      debugPrint("API Error (Languages): $e");
     }
   }
 
-  // ----------------------------
+  // LOAD CATEGORIES
+
+  Future<void> _loadCategories() async {
+    try {
+      final result = await GetCategoriesApiService.getCategories();
+
+      _categoriesMap = {for (var e in result) e.name: e.id};
+
+      setState(() {
+        _categories = _categoriesMap.keys.toList();
+        _selectedCategory = _categories.isNotEmpty ? _categories.first : null;
+      });
+    } catch (e) {
+      debugPrint("API Error (Categories): $e");
+    }
+  }
+
   // LOAD COURSES
-  // ----------------------------
+
   Future<void> _loadCourses() async {
     setState(() {
       _loadingCourses = true;
     });
 
-    // Convert selected name -> code
     String? langParam;
     if (_selectedLanguage != "All Languages") {
       langParam = _languageMap[_selectedLanguage];
-      // Example: "English" -> "en"
     }
 
-    // Search param
+    String? categoryParam;
+    if (_selectedCategory != null) {
+      categoryParam = _categoriesMap[_selectedCategory];
+      print("Category Param: $categoryParam");
+    }
+
     String? searchParam;
     if (_searchQuery.isNotEmpty) {
       searchParam = _searchQuery;
@@ -106,8 +124,9 @@ class AssignedCoursesState extends State<AssignedCourses> {
 
     try {
       final result = await GetMyCoursesApiService.getMyCourses(
-        status: "IN_PROGRESS",
-        lang: langParam, // Send code to API
+        status: "NOT_STARTED",
+        lang: langParam,
+        categoryId: categoryParam,
         searchKey: searchParam,
       );
 
@@ -116,16 +135,15 @@ class AssignedCoursesState extends State<AssignedCourses> {
         _loadingCourses = false;
       });
     } catch (e) {
-      print("API Error (Courses): $e");
+      debugPrint("API Error (Courses): $e");
       setState(() {
         _loadingCourses = false;
       });
     }
   }
 
-  // ----------------------------
   // DROPDOWN CHANGE
-  // ----------------------------
+
   void _onLanguageChanged(String? newValue) {
     if (newValue == null) return;
 
@@ -137,9 +155,22 @@ class AssignedCoursesState extends State<AssignedCourses> {
     _loadCourses();
   }
 
-  // ----------------------------
+  // TAB CHANGE
+
+  void _onCategoryChanged(int index) {
+    if (index < 0 || index >= _categories.length) return;
+
+    setState(() {
+      _selectedCategory = _categories[index];
+      print("Selected Category: $_selectedCategory");
+    });
+
+    // Reload courses
+    _loadCourses();
+  }
+
   // SEARCH WITH DEBOUNCE
-  // ----------------------------
+
   void _onSearchChanged(String text) {
     _searchQuery = text;
 
@@ -169,6 +200,7 @@ class AssignedCoursesState extends State<AssignedCourses> {
             languages: _languages,
             onChanged: _onLanguageChanged,
           ),
+
           const SizedBox(height: 10),
 
           // Search bar
@@ -176,19 +208,9 @@ class AssignedCoursesState extends State<AssignedCourses> {
 
           const SizedBox(height: 20),
 
-          HorizontalTabBar(
-            tabs: const [
-              "Understanding Learner",
-              "Assessment & Feedback",
-              "Education Evolution & Management",
-              "Subject Pedagogy",
-              "Designing Learning Experiences"
-            ],
-            onChanged: (index) {
-              // This runs when tab changes
-              print("Selected tab: $index");
-            },
-          ),
+          // Categories tabs
+          if (_categories.isNotEmpty)
+            HorizontalTabBar(tabs: _categories, onChanged: _onCategoryChanged),
 
           const SizedBox(height: 20),
 

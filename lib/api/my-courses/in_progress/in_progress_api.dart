@@ -13,7 +13,7 @@ class GetMyCoursesApiService {
     String sortingDirection = "desc",
     int pageSize = 8,
     int pageNumber = 1,
-    String orderByPropertyName = "_id",
+    String orderByPropertyName = "_id", String? categoryId,
   }) async {
     const String endpoint = "/my-courses";
 
