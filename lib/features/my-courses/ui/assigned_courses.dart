@@ -180,8 +180,9 @@ class AssignedCoursesState extends State<AssignedCourses> {
             tabs: const [
               "Understanding Learner",
               "Assessment & Feedback",
-              "Engagement",
-              "Progress",
+              "Education Evolution & Management",
+              "Subject Pedagogy",
+              "Designing Learning Experiences"
             ],
             onChanged: (index) {
               // This runs when tab changes

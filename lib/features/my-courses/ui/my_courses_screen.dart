@@ -11,7 +11,7 @@ class MyCoures extends StatefulWidget {
 }
 
 class MyCoursesScreenState extends State<MyCoures> {
-  var screenIndex = 1;
+  var screenIndex = 0;
 
   @override
   Widget build(BuildContext context) {

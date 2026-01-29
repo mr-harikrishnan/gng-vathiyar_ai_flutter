@@ -24,7 +24,7 @@ class _HorizontalTabBarState extends State<HorizontalTabBar> {
     return SizedBox(
       height: 48,
       child: ListView.builder(
-        scrollDirection: Axis.horizontal, // Horizontal scroll
+        scrollDirection: Axis.horizontal, 
         itemCount: widget.tabs.length,
         itemBuilder: (context, index) {
           final isSelected = index == selectedIndex;
@@ -32,9 +32,9 @@ class _HorizontalTabBarState extends State<HorizontalTabBar> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedIndex = index; // Update selected tab
+                selectedIndex = index; 
               });
-              widget.onChanged(index); // Send value to parent
+              widget.onChanged(index); 
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -43,7 +43,7 @@ class _HorizontalTabBarState extends State<HorizontalTabBar> {
                 border: Border(
                   bottom: BorderSide(
                     color: isSelected
-                        ? Colors.teal // Active line color
+                        ? const Color.fromARGB(255, 0, 101, 91) 
                         : Colors.transparent,
                     width: 3,
                   ),
@@ -52,10 +52,8 @@ class _HorizontalTabBarState extends State<HorizontalTabBar> {
               child: Text(
                 widget.tabs[index],
                 style: TextStyle(
-                  fontSize: 14,
-                  fontWeight:
-                      isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? Colors.teal : Colors.black54,
+                  fontSize: 16,
+                  color: isSelected ? const Color.fromARGB(255, 1, 88, 79) : Colors.black54,
                 ),
               ),
             ),
