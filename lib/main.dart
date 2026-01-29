@@ -95,10 +95,6 @@ class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     // Simple loading screen
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

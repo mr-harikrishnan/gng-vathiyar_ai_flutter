@@ -94,7 +94,9 @@ class LoginPageState extends State<LoginPage> {
                         }
 
                         final isEmail = EmailValidator.validate(value);
-                        final isPhone = RegExp(r'^\+?[0-9]{10,12}$').hasMatch(value);
+                        final isPhone = RegExp(
+                          r'^\+?[0-9]{10,12}$',
+                        ).hasMatch(value);
 
                         if (!isEmail && !isPhone) {
                           return 'Please enter a valid email or phone number';
@@ -160,51 +162,59 @@ class LoginPageState extends State<LoginPage> {
 
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:_isLoading? const Color.fromARGB(255, 102, 248, 238) : const Color(0xFF016A63),
+                        backgroundColor: _isLoading
+                            ? const Color.fromARGB(255, 102, 248, 238)
+                            : const Color(0xFF016A63),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         minimumSize: const Size(double.infinity, 50),
                       ),
-                      onPressed: _isLoading ? null : () async {
-                        if (!_formKey.currentState!.validate()) return;
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              if (!_formKey.currentState!.validate()) return;
 
-                        setState(() {
-                          _isLoading = true;
-                        });
+                              setState(() {
+                                _isLoading = true;
+                              });
 
-                        // Prepare login value
-                        String loginValue = emailOrmobileNoController.text;
+                              // Prepare login value
+                              String loginValue =
+                                  emailOrmobileNoController.text;
 
-                        // Add +91 if it's a 10-digit phone number
-                        if (RegExp(r'^[0-9]{10}$').hasMatch(loginValue)) {
-                          loginValue = '+91$loginValue';
-                        }
+                              // Add +91 if it's a 10-digit phone number
+                              if (RegExp(r'^[0-9]{10}$').hasMatch(loginValue)) {
+                                loginValue = '+91$loginValue';
+                              }
 
-                        bool success = await CognitoService(). signIn(
-                          context,
-                          loginValue,
-                          passwordController.text,
-                        );
+                              bool success = await CognitoService().signIn(
+                                context,
+                                loginValue,
+                                passwordController.text,
+                              );
 
-                        if (!mounted) return;
+                              if (!mounted) return;
 
-                        setState(() {
-                          _isLoading = false;
-                        });
+                              setState(() {
+                                _isLoading = false;
+                              });
 
-                        if (success) {
-                          await showPopError(
-                            context,
-                            "Login successful",
-                            "success",
-                          );
+                              if (success) {
+                                await showPopError(
+                                  context,
+                                  "Login successful",
+                                  "success",
+                                );
 
-                          if (!mounted) return;
+                                if (!mounted) return;
 
-                          Navigator.pushReplacementNamed(context, '/dashboard');
-                        }
-                      },
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  '/dashboard',
+                                );
+                              }
+                            },
                       child: _isLoading
                           ? const SizedBox(
                               height: 24,

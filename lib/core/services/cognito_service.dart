@@ -58,11 +58,7 @@ class CognitoService {
       return false;
     } catch (e) {
       if (context.mounted) {
-        showPopError(
-          context,
-          "Unknown error during login",
-          "Error",
-        );
+        showPopError(context, "Unknown error during login", "Error");
       }
       return false;
     }
@@ -92,12 +88,9 @@ class CognitoService {
 
       final result = await cognitoPlugin.fetchAuthSession();
 
-      final accessToken =
-          result.userPoolTokensResult.value.accessToken.raw;
-      final idToken =
-          result.userPoolTokensResult.value.idToken.raw;
-      final refreshToken =
-          result.userPoolTokensResult.value.refreshToken;
+      final accessToken = result.userPoolTokensResult.value.accessToken.raw;
+      final idToken = result.userPoolTokensResult.value.idToken.raw;
+      final refreshToken = result.userPoolTokensResult.value.refreshToken;
 
       // Store tokens securely
       await writeSecureData("accessToken", accessToken);
