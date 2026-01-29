@@ -42,8 +42,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-// This widget runs when app starts
-// It checks token and redirects
+
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
@@ -95,6 +94,6 @@ class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     // Simple loading screen
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return const Scaffold(body: Center(child: SizedBox()));
   }
 }
