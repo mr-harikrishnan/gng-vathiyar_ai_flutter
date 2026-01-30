@@ -20,7 +20,7 @@ class DashboardState extends State<Dashboard> {
         ),
       ),
       drawer: AppDrawer(),
-      body: Center(child: Text("Dashboard"),),
+      body: Center(child: Text("Dashboard")),
     );
   }
 }

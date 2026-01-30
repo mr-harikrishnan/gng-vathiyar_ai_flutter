@@ -61,19 +61,14 @@ class _DropdownState extends State<Dropdown> {
             horizontal: 12,
             vertical: 14,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: Colors.grey),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(
-              color: Color(0xFF009688),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFF009688), width: 2),
           ),
         ),
       ),

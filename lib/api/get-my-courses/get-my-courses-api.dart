@@ -9,10 +9,10 @@ class GetMyCoursesApiService {
 
   // GET /my-courses
   static Future<List<CourseModel>> getMyCourses({
-    required String status, 
-    String? enrollType, 
-    String? categoryId, 
-    String? lang, 
+    required String status,
+    String? enrollType,
+    String? categoryId,
+    String? lang,
     String? searchKey,
     String sortingDirection = "desc",
     int pageSize = 8,
@@ -52,8 +52,6 @@ class GetMyCoursesApiService {
       _baseUrl + endpoint,
     ).replace(queryParameters: queryParams);
 
-    print("GET My Courses URI: $uri");
-
     // Read JWT token
     final token = await readSecureData("idToken");
 
@@ -64,7 +62,6 @@ class GetMyCoursesApiService {
 
     // Call API
     final response = await http.get(uri, headers: headers);
-    print("Response Status: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       try {
@@ -117,7 +114,7 @@ class CourseModel {
   // JSON -> Model
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     return CourseModel(
-      id: json["_id"] ?? "",
+      id: json["id"] ?? "",
       title: json["title"] ?? "",
       subTitle: json["subTitle"] ?? "",
       thumbnailImage: json["thumbnailImage"] ?? "",

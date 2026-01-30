@@ -8,12 +8,9 @@ class GetlanguagesApiService {
   // GET /languages
   static Future<List<LanguageModel>> getLanguages() async {
     const String endpoint = "/languages";
-    final uri = Uri.parse(
-      _baseUrl + endpoint,
-    ).replace(queryParameters: {
-      "sortingDirection": "asc",
-      "isPaginated": "false",
-    });
+    final uri = Uri.parse(_baseUrl + endpoint).replace(
+      queryParameters: {"sortingDirection": "asc", "isPaginated": "false"},
+    );
 
     final token = await readSecureData("AcessToken");
     final headers = {
@@ -53,9 +50,7 @@ class LanguageModel {
   });
 
   // JSON -> Model
-  factory LanguageModel.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  factory LanguageModel.fromJson(Map<String, dynamic> json) {
     return LanguageModel(
       id: json["id"],
       name: json["name"],

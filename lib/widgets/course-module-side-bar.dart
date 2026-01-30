@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
 
 class CourseModuleSideBar extends StatefulWidget {
   final String courseTitle;
-  final Map<String, dynamic>? courseData;
-  
+
+  // Receive sections from CourseDetails
+  final List<SectionModel> sections;
+
   const CourseModuleSideBar({
     super.key,
     required this.courseTitle,
-    this.courseData,
+    required this.sections,
   });
 
   @override
@@ -45,66 +48,24 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
             ),
             const Divider(height: 1),
 
-            // Modules List
+            // Modules List from API
             Expanded(
-              child: ListView(
+              child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                children: [
-                  _buildModuleItem(
-                    title: 'Introduction to the Session',
-                    isCompleted: true,
-                    onTap: () {
-                      Navigator.pop(context);
-                      print('Introduction tapped');
-                    },
-                  ),
-                  _buildModuleItem(
-                    title: 'Pre-Test',
-                    isCompleted: true,
-                    onTap: () {
-                      Navigator.pop(context);
-                      print('Pre-Test tapped');
-                    },
-                  ),
-                  _buildExpandableModule(
-                    title: 'Module 1: Let\'s Identify the challenges',
-                    children: [
-                      _buildSubModuleItem(
-                        title: 'Identifying the Challenges in School',
-                        isCompleted: true,
-                      ),
-                      _buildSubModuleItem(
-                        title: 'Quiz',
-                        isCompleted: true,
-                      ),
-                      _buildSubModuleItem(
-                        title: 'Possible Challenges & Solutions',
-                        isCompleted: false,
-                        textColor: Color(0xFF006A63),
-                      ),
-                      _buildSubModuleItem(
-                        title: 'Quiz',
-                        isCompleted: false,
-                        isLocked: true,
-                      ),
-                    ],
-                  ),
-                  _buildExpandableModule(
-                    title: 'Module 2: Concept of No Bag Day and Policy Connect',
-                    children: [
-                      _buildSubModuleItem(
-                        title: 'No Bag Day and Policy Connect',
-                        isCompleted: false,
-                        isLocked: true,
-                      ),
-                      _buildSubModuleItem(
-                        title: 'Quiz',
-                        isCompleted: false,
-                        isLocked: true,
-                      ),
-                    ],
-                  ),
-                ],
+                itemCount: widget.sections.length,
+                itemBuilder: (context, index) {
+                  final section = widget.sections[index];
+
+                  return _buildExpandableModule(
+                    title: section.title,
+                    children: section.topics.map((topic) {
+                      return _buildSubModuleItem(
+                        title: topic.title,
+                        isCompleted: topic.isCompleted,
+                      );
+                    }).toList(),
+                  );
+                },
               ),
             ),
           ],
@@ -113,22 +74,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
     );
   }
 
-  Widget _buildModuleItem({
-    required String title,
-    required bool isCompleted,
-    VoidCallback? onTap,
-  }) {
-    return ListTile(
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 14, color: Colors.black),
-      ),
-      trailing: isCompleted
-          ? const Icon(Icons.check_circle, color: Color(0xFF006A63), size: 20)
-          : null,
-      onTap: onTap,
-    );
-  }
+  // ---------------- UI HELPERS ----------------
 
   Widget _buildExpandableModule({
     required String title,
@@ -141,7 +87,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
           title,
           style: const TextStyle(fontSize: 14, color: Colors.black),
         ),
-        initiallyExpanded: true,
+        initiallyExpanded: false,
         children: children,
       ),
     );
@@ -158,21 +104,17 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
       child: ListTile(
         title: Text(
           title,
-          style: TextStyle(
-            fontSize: 14,
-            color: textColor ?? Colors.black,
-          ),
+          style: TextStyle(fontSize: 14, color: textColor ?? Colors.black),
         ),
         trailing: isLocked
-            ? const Icon(Icons.lock_outline, color: Colors.black, size: 18)
+            ? const Icon(Icons.lock_outline, size: 18)
             : isCompleted
-                ? const Icon(Icons.check_circle, color: Color(0xFF006A63), size: 18)
-                : null,
+            ? const Icon(Icons.check_circle, color: Color(0xFF006A63), size: 18)
+            : null,
         onTap: isLocked
             ? null
             : () {
                 Navigator.pop(context);
-                print('$title tapped');
               },
       ),
     );

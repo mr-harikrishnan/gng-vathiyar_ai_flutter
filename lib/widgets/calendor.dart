@@ -15,15 +15,15 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7F6), 
+      backgroundColor: const Color(0xFFF5F7F6),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Container(
           padding: const EdgeInsets.all(16),
           height: 420,
           decoration: BoxDecoration(
-            color: Colors.white, 
-            borderRadius: BorderRadius.circular(16), 
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
@@ -41,9 +41,7 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
                 children: [
                   Text(
                     _getMonthYear(_focusedDay),
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
+                    style: const TextStyle(fontSize: 20),
                   ),
                   Row(
                     children: [
@@ -119,12 +117,8 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  defaultTextStyle: const TextStyle(
-                    color: Colors.black,
-                  ),
-                  weekendTextStyle: const TextStyle(
-                    color: Colors.black,
-                  ),
+                  defaultTextStyle: const TextStyle(color: Colors.black),
+                  weekendTextStyle: const TextStyle(color: Colors.black),
                 ),
 
                 // Style for week days row (S M T W T F S)
@@ -160,7 +154,7 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
       "September",
       "October",
       "November",
-      "December"
+      "December",
     ];
 
     return "${months[date.month - 1]} ${date.year}";

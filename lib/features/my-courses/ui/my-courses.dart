@@ -35,7 +35,9 @@ class MyCoursesScreenState extends State<MyCoures> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
-                      backgroundColor: screenIndex == 0 ? Color(0xFF016A63) : Colors.white,
+                      backgroundColor: screenIndex == 0
+                          ? Color(0xFF016A63)
+                          : Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -48,7 +50,9 @@ class MyCoursesScreenState extends State<MyCoures> {
                     child: Text(
                       "In Progress",
                       style: TextStyle(
-                        color: screenIndex == 0 ? Colors.white : Color(0xFF016A63),
+                        color: screenIndex == 0
+                            ? Colors.white
+                            : Color(0xFF016A63),
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
@@ -61,7 +65,9 @@ class MyCoursesScreenState extends State<MyCoures> {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: screenIndex == 1 ? Color(0xFF016A63) : Colors.white,
+                      backgroundColor: screenIndex == 1
+                          ? Color(0xFF016A63)
+                          : Colors.white,
                       minimumSize: const Size.fromHeight(48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -75,7 +81,9 @@ class MyCoursesScreenState extends State<MyCoures> {
                     child: Text(
                       "Assigned Courses",
                       style: TextStyle(
-                        color: screenIndex == 1 ? Colors.white : Color(0xFF016A63),
+                        color: screenIndex == 1
+                            ? Colors.white
+                            : Color(0xFF016A63),
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),

@@ -43,9 +43,7 @@ class GetCategoriesApiService {
         final List items = data["items"];
 
         // Convert JSON -> model list
-        return items
-            .map((e) => CategoriesModel.fromJson(e))
-            .toList();
+        return items.map((e) => CategoriesModel.fromJson(e)).toList();
       } catch (e) {
         throw Exception("JSON Decode Failed: $e");
       }
@@ -59,10 +57,7 @@ class CategoriesModel {
   final String id;
   final String name;
 
-  CategoriesModel({
-    required this.id,
-    required this.name,
-  });
+  CategoriesModel({required this.id, required this.name});
 
   factory CategoriesModel.fromJson(Map<String, dynamic> json) {
     return CategoriesModel(

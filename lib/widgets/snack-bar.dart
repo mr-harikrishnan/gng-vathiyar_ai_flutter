@@ -4,18 +4,12 @@ import 'package:flutter/material.dart';
 class SnackBarWidget extends StatelessWidget {
   final String message;
 
-  const SnackBarWidget({
-    super.key,
-    required this.message,
-  });
+  const SnackBarWidget({super.key, required this.message});
 
   // Static helper to show SnackBar from logic
   static void show(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-      ),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
     );
   }
 
@@ -25,10 +19,7 @@ class SnackBarWidget extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Show the SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 2),
-        ),
+        SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
       );
     });
 
