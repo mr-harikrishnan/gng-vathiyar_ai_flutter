@@ -4,13 +4,19 @@ import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.
 class CourseModuleSideBar extends StatefulWidget {
   final String courseTitle;
 
-  // Receive sections from CourseDetails
+  // Sections from API
   final List<SectionModel> sections;
+
+  // Flags from API (pass later from CourseDetails if needed)
+  final bool isIntroCompleted;
+  final bool isPreTestCompleted;
 
   const CourseModuleSideBar({
     super.key,
     required this.courseTitle,
     required this.sections,
+    this.isIntroCompleted = false,
+    this.isPreTestCompleted = false,
   });
 
   @override
@@ -26,7 +32,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
       child: SafeArea(
         child: Column(
           children: [
-            // Header
+            // HEADER
             Container(
               padding: const EdgeInsets.all(16),
               alignment: Alignment.centerLeft,
@@ -48,24 +54,79 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
             ),
             const Divider(height: 1),
 
-            // Modules List from API
+            // LIST
             Expanded(
-              child: ListView.builder(
+              child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: widget.sections.length,
-                itemBuilder: (context, index) {
-                  final section = widget.sections[index];
+                children: [
+                  // INTRO
+                  _buildModuleItem(
+                    title: "Introduction to the Session",
+                    isCompleted: widget.isIntroCompleted,
+                    onTap: () {
+                      Navigator.pop(context);
+                      print("Intro tapped");
+                    },
+                  ),
 
-                  return _buildExpandableModule(
-                    title: section.title,
-                    children: section.topics.map((topic) {
-                      return _buildSubModuleItem(
-                        title: topic.title,
-                        isCompleted: topic.isCompleted,
-                      );
-                    }).toList(),
-                  );
-                },
+                  // PRE TEST
+                  _buildModuleItem(
+                    title: "Pre-Test",
+                    isCompleted: widget.isPreTestCompleted,
+                    onTap: () {
+                      Navigator.pop(context);
+                      print("Pre-Test tapped");
+                    },
+                  ),
+
+                  // SECTIONS FROM API
+                  ...widget.sections.map((section) {
+                    return _buildExpandableModule(
+                      title: section.title,
+                      children: section.topics.map((topic) {
+                        return Column(
+                          children: [
+                            // TOPIC
+                            _buildSubModuleItem(
+                              title: topic.title,
+                              isCompleted: topic.isCompleted,
+                            ),
+
+                            // QUIZ ROW
+                            _buildSubModuleItem(
+                              title: "Quiz",
+                              isCompleted: false,
+                              isLocked: topic.isCompleted == false,
+                              textColor: const Color(0xFF006A63),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    );
+                  }).toList(),
+
+                  // SUMMARY
+                  _buildModuleItem(
+                    title: "Summary",
+                    isCompleted: false,
+                    isLocked: true,
+                    onTap: () {
+                      Navigator.pop(context);
+                      print("Summary tapped");
+                    },
+                  ),
+
+                  // CERTIFICATE
+                  _buildModuleItem(
+                    title: "Certificate",
+                    isCompleted: false,
+                    isLocked: true,
+                    onTap: () {
+                      Navigator.pop(context);
+                      print("Certificate tapped");
+                    },
+                  ),
+                ],
               ),
             ),
           ],
@@ -75,6 +136,26 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
   }
 
   // ---------------- UI HELPERS ----------------
+
+  Widget _buildModuleItem({
+    required String title,
+    required bool isCompleted,
+    bool isLocked = false,
+    VoidCallback? onTap,
+  }) {
+    return ListTile(
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 14, color: Colors.black),
+      ),
+      trailing: isLocked
+          ? const Icon(Icons.lock_outline, size: 18)
+          : isCompleted
+          ? const Icon(Icons.check_circle, color: Color(0xFF006A63), size: 20)
+          : null,
+      onTap: isLocked ? null : onTap,
+    );
+  }
 
   Widget _buildExpandableModule({
     required String title,
@@ -115,6 +196,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
             ? null
             : () {
                 Navigator.pop(context);
+                print("Tapped: $title");
               },
       ),
     );

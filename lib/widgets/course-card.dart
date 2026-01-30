@@ -58,6 +58,9 @@ class CourseCardState extends State<CourseCard> {
             'courseTitle': widget.course.title,
           },
         );
+
+        print("Tapped on course Title: ${widget.course.title}");
+        print("Tapped on course id: ${widget.course.id}");
       },
       child: Container(
         padding: const EdgeInsets.all(12),
