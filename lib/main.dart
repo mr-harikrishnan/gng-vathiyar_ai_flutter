@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
-import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
-import 'package:vathiyar_ai_flutter/core/storage/secureStorage/secure_storage.dart';
-import 'package:vathiyar_ai_flutter/features/auth/ui/login_screen.dart';
-import 'package:vathiyar_ai_flutter/features/dashboard/ui/dashboard_screen.dart';
-import 'package:vathiyar_ai_flutter/features/my-courses/ui/my_courses_screen.dart';
+import 'package:vathiyar_ai_flutter/core/services/cognito-service.dart';
+import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
+import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
+import 'package:vathiyar_ai_flutter/features/auth/ui/login-screen.dart';
+import 'package:vathiyar_ai_flutter/features/dashboard/ui/dashboard-screen.dart';
+import 'package:vathiyar_ai_flutter/features/my-courses/ui/my-courses.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

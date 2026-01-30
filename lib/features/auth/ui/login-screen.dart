@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:vathiyar_ai_flutter/widgets/show_pop.dart';
-import '../../../core/services/cognito_service.dart';
+import 'package:vathiyar_ai_flutter/widgets/show-pop.dart';
+import '../../../core/services/cognito-service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

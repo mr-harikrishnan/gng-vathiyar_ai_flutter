@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vathiyar_ai_flutter/features/my-courses/ui/assigned_courses.dart';
-import 'package:vathiyar_ai_flutter/features/my-courses/ui/in_progress.dart';
-import 'package:vathiyar_ai_flutter/widgets/app_drawer.dart';
+import 'package:vathiyar_ai_flutter/features/my-courses/ui/assigned-courses.dart';
+import 'package:vathiyar_ai_flutter/features/my-courses/ui/in-progress.dart';
+import 'package:vathiyar_ai_flutter/widgets/app-drawer.dart';
 
 class MyCoures extends StatefulWidget {
   const MyCoures({super.key});

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
-import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
-import 'package:vathiyar_ai_flutter/core/storage/secureStorage/secure_storage.dart';
-import 'package:vathiyar_ai_flutter/widgets/show_pop.dart';
+import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
+import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
+import 'package:vathiyar_ai_flutter/widgets/show-pop.dart';
+
 import '../../amplifyconfiguration.dart';
 
 class CognitoService {

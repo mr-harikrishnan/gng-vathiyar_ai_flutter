@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vathiyar_ai_flutter/core/services/cognito_service.dart';
-import 'package:vathiyar_ai_flutter/core/storage/getXController/userController.dart';
-import 'package:vathiyar_ai_flutter/widgets/showYesNoDailog.dart';
+import 'package:vathiyar_ai_flutter/core/services/cognito-service.dart';
+import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
+import 'package:vathiyar_ai_flutter/widgets/show-yes-no-dailog.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
