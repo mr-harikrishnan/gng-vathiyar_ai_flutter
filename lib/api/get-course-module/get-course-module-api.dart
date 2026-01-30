@@ -1,4 +1,6 @@
 // lib/api/get-course-module/get_course_module_api.dart
+// FULL MODEL + API
+// This fixes quiz status and avoids UI repeat issues
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -15,7 +17,7 @@ class GetCourseModuleApiService {
 
     final uri = Uri.parse(_baseUrl + endpoint);
 
-    // Read JWT token from secure storage
+    // Read JWT token
     final token = await readSecureData("idToken");
 
     final headers = {
@@ -48,6 +50,8 @@ class CourseModuleModel {
   final String title;
   final String description;
   final String status;
+  final bool isIntroCompleted;
+  final bool isPreTestCompleted;
   final List<SectionModel> sections;
 
   CourseModuleModel({
@@ -55,6 +59,8 @@ class CourseModuleModel {
     required this.title,
     required this.description,
     required this.status,
+    required this.isIntroCompleted,
+    required this.isPreTestCompleted,
     required this.sections,
   });
 
@@ -64,6 +70,11 @@ class CourseModuleModel {
       title: json["title"].toString(),
       description: json["description"].toString(),
       status: json["learnerCourseStatus"].toString(),
+
+      // Flags for top rows
+      isIntroCompleted: json["isIntroCompleted"] == true,
+      isPreTestCompleted: json["isPreTestCompleted"] == true,
+
       sections: (json["sections"] as List)
           .map((e) => SectionModel.fromJson(e))
           .toList(),
@@ -94,18 +105,31 @@ class SectionModel {
 class TopicModel {
   final String title;
   final bool isCompleted;
+  final bool isQuizCompleted;
+  final String? quizId;
   final List<ContentModel> contents;
 
   TopicModel({
     required this.title,
     required this.isCompleted,
+    required this.isQuizCompleted,
+    required this.quizId,
     required this.contents,
   });
 
   factory TopicModel.fromJson(Map<String, dynamic> json) {
     return TopicModel(
       title: json["title"].toString(),
+
+      // Video / content completed
       isCompleted: json["isTopicCompleted"] == true,
+
+      // Quiz completed
+      isQuizCompleted: json["isTopicQuizCompleted"] == true,
+
+      // Quiz ID for navigation
+      quizId: json["quizId"]?.toString(),
+
       contents: (json["topicId"]["contentIds"] as List)
           .map((e) => ContentModel.fromJson(e))
           .toList(),
@@ -113,7 +137,7 @@ class TopicModel {
   }
 }
 
-// Content model (video / pdf / youtube)
+// Content model
 class ContentModel {
   final String id;
   final String type;

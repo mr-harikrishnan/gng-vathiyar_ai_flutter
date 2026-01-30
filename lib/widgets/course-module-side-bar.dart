@@ -1,13 +1,12 @@
+// FIX: SHOW QUIZ ONLY IF API HAS quizId
+// Module 5 topics have NO quizId, so UI must hide Quiz row
+
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
 
-class CourseModuleSideBar extends StatefulWidget {
+class CourseModuleSideBar extends StatelessWidget {
   final String courseTitle;
-
-  // Sections from API
   final List<SectionModel> sections;
-
-  // Flags from API (pass later from CourseDetails if needed)
   final bool isIntroCompleted;
   final bool isPreTestCompleted;
 
@@ -19,13 +18,6 @@ class CourseModuleSideBar extends StatefulWidget {
     this.isPreTestCompleted = false,
   });
 
-  @override
-  State<StatefulWidget> createState() {
-    return CourseModuleSideBarState();
-  }
-}
-
-class CourseModuleSideBarState extends State<CourseModuleSideBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -40,7 +32,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Modules',
+                    "Modules",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                   IconButton(
@@ -62,7 +54,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
                   // INTRO
                   _buildModuleItem(
                     title: "Introduction to the Session",
-                    isCompleted: widget.isIntroCompleted,
+                    isCompleted: isIntroCompleted,
                     onTap: () {
                       Navigator.pop(context);
                       print("Intro tapped");
@@ -72,33 +64,47 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
                   // PRE TEST
                   _buildModuleItem(
                     title: "Pre-Test",
-                    isCompleted: widget.isPreTestCompleted,
+                    isCompleted: isPreTestCompleted,
                     onTap: () {
                       Navigator.pop(context);
                       print("Pre-Test tapped");
                     },
                   ),
 
-                  // SECTIONS FROM API
-                  ...widget.sections.map((section) {
+                  // SECTIONS
+                  ...sections.map((section) {
                     return _buildExpandableModule(
                       title: section.title,
                       children: section.topics.map((topic) {
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // TOPIC
+                            // TOPIC ROW
                             _buildSubModuleItem(
                               title: topic.title,
                               isCompleted: topic.isCompleted,
+                              onTap: () {
+                                Navigator.pop(context);
+                                print("Open topic: ${topic.title}");
+                              },
                             ),
 
-                            // QUIZ ROW
-                            _buildSubModuleItem(
-                              title: "Quiz",
-                              isCompleted: false,
-                              isLocked: topic.isCompleted == false,
-                              textColor: const Color(0xFF006A63),
-                            ),
+                            // QUIZ ROW (ONLY IF EXISTS IN API)
+                            if (topic.quizId != null &&
+                                topic.quizId!.isNotEmpty)
+                              _buildSubModuleItem(
+                                title: "Quiz",
+                                isCompleted: topic.isQuizCompleted,
+
+                                // Lock quiz until topic done
+                                isLocked: topic.isCompleted == false,
+
+                                textColor: const Color(0xFF006A63),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  print("Open quiz: ${topic.quizId}");
+                                },
+                              ),
                           ],
                         );
                       }).toList(),
@@ -135,7 +141,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
     );
   }
 
-  // ---------------- UI HELPERS ----------------
+  // ---------------- HELPERS ----------------
 
   Widget _buildModuleItem({
     required String title,
@@ -144,10 +150,7 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
     VoidCallback? onTap,
   }) {
     return ListTile(
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 14, color: Colors.black),
-      ),
+      title: Text(title, style: const TextStyle(fontSize: 14)),
       trailing: isLocked
           ? const Icon(Icons.lock_outline, size: 18)
           : isCompleted
@@ -162,12 +165,9 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
     required List<Widget> children,
   }) {
     return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      data: ThemeData(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: Text(
-          title,
-          style: const TextStyle(fontSize: 14, color: Colors.black),
-        ),
+        title: Text(title, style: const TextStyle(fontSize: 14)),
         initiallyExpanded: false,
         children: children,
       ),
@@ -179,25 +179,18 @@ class CourseModuleSideBarState extends State<CourseModuleSideBar> {
     required bool isCompleted,
     bool isLocked = false,
     Color? textColor,
+    VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.only(left: 16),
       child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(fontSize: 14, color: textColor ?? Colors.black),
-        ),
+        title: Text(title, style: TextStyle(fontSize: 14, color: textColor)),
         trailing: isLocked
             ? const Icon(Icons.lock_outline, size: 18)
             : isCompleted
             ? const Icon(Icons.check_circle, color: Color(0xFF006A63), size: 18)
             : null,
-        onTap: isLocked
-            ? null
-            : () {
-                Navigator.pop(context);
-                print("Tapped: $title");
-              },
+        onTap: isLocked ? null : onTap,
       ),
     );
   }
