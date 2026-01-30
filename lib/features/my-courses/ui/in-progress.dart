@@ -1,3 +1,5 @@
+// lib/features/in-progress/in-progress.dart
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-languages/get-languages-api.dart';
@@ -14,14 +16,10 @@ class InProgress extends StatefulWidget {
 }
 
 class InProgressState extends State<InProgress> {
-  // ----------------------------
-  // DATA
-  // ----------------------------
-
   // Course list
   List<CourseModel> _courseModels = [];
 
-  // Dropdown list (names only)
+  // Language dropdown
   List<String> _languages = ["All Languages"];
   String _selectedLanguage = "All Languages";
 
@@ -31,7 +29,7 @@ class InProgressState extends State<InProgress> {
   // Search text
   String _searchQuery = "";
 
-  // Loading flags
+  // Loading flag
   bool _loadingCourses = true;
 
   // Debounce timer
@@ -49,52 +47,38 @@ class InProgressState extends State<InProgress> {
     super.dispose();
   }
 
-  // ----------------------------
-  // INITIAL LOAD
-  // ----------------------------
+  // Load languages + courses
   Future<void> _loadInitialData() async {
     await _loadLanguages();
     await _loadCourses();
   }
 
-  // ----------------------------
-  // LOAD LANGUAGES
-  // ----------------------------
+  // Load languages from API
   Future<void> _loadLanguages() async {
-    setState(() {});
-
     try {
       final result = await GetlanguagesApiService.getLanguages();
 
       // Build name -> code map
       _languageMap = {for (var e in result) e.name: e.code};
 
-      // Debug print
-      print("Languages Map: $_languageMap");
-
       setState(() {
-        // Show only names in dropdown
         _languages = ["All Languages", ..._languageMap.keys];
       });
     } catch (e) {
-      print("API Error (Languages): $e");
-      setState(() {});
+      debugPrint("API Error (Languages): $e");
     }
   }
 
-  // ----------------------------
-  // LOAD COURSES
-  // ----------------------------
+  // Load courses for IN_PROGRESS
   Future<void> _loadCourses() async {
     setState(() {
       _loadingCourses = true;
     });
 
-    // Convert selected name -> code
+    // Convert name -> code
     String? langParam;
     if (_selectedLanguage != "All Languages") {
       langParam = _languageMap[_selectedLanguage];
-      // Example: "English" -> "en"
     }
 
     // Search param
@@ -106,8 +90,12 @@ class InProgressState extends State<InProgress> {
     try {
       final result = await GetMyCoursesApiService.getMyCourses(
         status: "IN_PROGRESS",
-        lang: langParam, // Send code to API
+        lang: langParam,
         searchKey: searchParam,
+        sortingDirection: "desc",
+        pageSize: 8,
+        pageNumber: 1,
+        orderByPropertyName: "_id",
       );
 
       setState(() {
@@ -115,16 +103,14 @@ class InProgressState extends State<InProgress> {
         _loadingCourses = false;
       });
     } catch (e) {
-      print("API Error (Courses): $e");
+      debugPrint("API Error (Courses): $e");
       setState(() {
         _loadingCourses = false;
       });
     }
   }
 
-  // ----------------------------
-  // DROPDOWN CHANGE
-  // ----------------------------
+  // Dropdown change
   void _onLanguageChanged(String? newValue) {
     if (newValue == null) return;
 
@@ -132,66 +118,64 @@ class InProgressState extends State<InProgress> {
       _selectedLanguage = newValue;
     });
 
-    // Reload courses
     _loadCourses();
   }
 
-  // ----------------------------
-  // SEARCH WITH DEBOUNCE
-  // ----------------------------
+  // Search with debounce
   void _onSearchChanged(String text) {
     _searchQuery = text;
 
-    // Cancel old timer
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel();
     }
 
-    // Wait 500ms before API call
     _debounce = Timer(const Duration(milliseconds: 500), () {
       _loadCourses();
     });
   }
 
-    @override
-    Widget build(BuildContext context) {
-      return Container(
-        color: const Color(0xFFF5F7F6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-  
-            // Language dropdown
-            Dropdown(
-              value: _selectedLanguage,
-              languages: _languages,
-              onChanged: _onLanguageChanged,
-            ),
-            const SizedBox(height: 10),
-  
-            // Search bar
-            SearchBarWidget(onChanged: _onSearchChanged),
-            const SizedBox(height: 20),
-  
-            // Course list
-            Expanded(
-              child: _loadingCourses
-                  ? const Center(child: CircularProgressIndicator())
-                  : _courseModels.isEmpty
-                      ? const Center(child: Text("No courses found."))
-                      : ListView.builder(
-                          itemCount: _courseModels.length,
-                          itemBuilder: (context, index) {
-                            final course = _courseModels[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: CourseCard(course: course),
-                            );
-                          },
-                        ),
-            ),
-          ],
-        ),
-      );
-    }}
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFFF5F7F6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+
+          // Language dropdown
+          Dropdown(
+            value: _selectedLanguage,
+            languages: _languages,
+            onChanged: _onLanguageChanged,
+          ),
+
+          const SizedBox(height: 10),
+
+          // Search bar
+          SearchBarWidget(onChanged: _onSearchChanged),
+
+          const SizedBox(height: 20),
+
+          // Course list
+          Expanded(
+            child: _loadingCourses
+                ? const Center(child: CircularProgressIndicator())
+                : _courseModels.isEmpty
+                ? const Center(child: Text("No courses found."))
+                : ListView.builder(
+                    itemCount: _courseModels.length,
+                    itemBuilder: (context, index) {
+                      final course = _courseModels[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: CourseCard(course: course),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}

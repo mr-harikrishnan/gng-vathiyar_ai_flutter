@@ -1,4 +1,4 @@
-// lib/features/assigned-courses/assigned_courses.dart
+// lib/features/assigned-courses/assigned-courses.dart
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -18,29 +18,23 @@ class AssignedCourses extends StatefulWidget {
 }
 
 class AssignedCoursesState extends State<AssignedCourses> {
-  //Data
-
+  // Lists
   List<String> _languages = ["All Languages"];
-
   List<String> _categories = [];
-
   List<CourseModel> _courseModels = [];
 
-  // Selected filters
-
+  // Selected values
+  String _selectedLanguage = "All Languages";
   String? _selectedCategory;
 
-  String _selectedLanguage = "All Languages";
-
-  // Naps
+  // Maps
   Map<String, String> _languageMap = {};
-
   Map<String, String> _categoriesMap = {};
 
   // Search text
   String _searchQuery = "";
 
-  // Loading flags
+  // Loading flag
   bool _loadingCourses = true;
 
   // Debounce timer
@@ -58,16 +52,14 @@ class AssignedCoursesState extends State<AssignedCourses> {
     super.dispose();
   }
 
-  // INITIAL LOAD
-
+  // Load all data
   Future<void> _loadInitialData() async {
     await _loadLanguages();
     await _loadCategories();
     await _loadCourses();
   }
 
-  // LOAD LANGUAGES
-
+  // Load languages
   Future<void> _loadLanguages() async {
     try {
       final result = await GetlanguagesApiService.getLanguages();
@@ -82,8 +74,7 @@ class AssignedCoursesState extends State<AssignedCourses> {
     }
   }
 
-  // LOAD CATEGORIES
-
+  // Load categories
   Future<void> _loadCategories() async {
     try {
       final result = await GetCategoriesApiService.getCategories();
@@ -99,24 +90,25 @@ class AssignedCoursesState extends State<AssignedCourses> {
     }
   }
 
-  // LOAD COURSES
-
+  // Load assigned courses
   Future<void> _loadCourses() async {
     setState(() {
       _loadingCourses = true;
     });
 
+    // Language code
     String? langParam;
     if (_selectedLanguage != "All Languages") {
       langParam = _languageMap[_selectedLanguage];
     }
 
+    // Category ID
     String? categoryParam;
     if (_selectedCategory != null) {
       categoryParam = _categoriesMap[_selectedCategory];
-      print("Category Param: $categoryParam");
     }
 
+    // Search text
     String? searchParam;
     if (_searchQuery.isNotEmpty) {
       searchParam = _searchQuery;
@@ -124,10 +116,15 @@ class AssignedCoursesState extends State<AssignedCourses> {
 
     try {
       final result = await GetMyCoursesApiService.getMyCourses(
+        enrollType: "ASSIGNED", // Only for Assigned screen
         status: "NOT_STARTED",
-        lang: langParam,
         categoryId: categoryParam,
+        lang: langParam,
         searchKey: searchParam,
+        sortingDirection: "desc",
+        pageSize: 8,
+        pageNumber: 1,
+        orderByPropertyName: "_id",
       );
 
       setState(() {
@@ -142,8 +139,7 @@ class AssignedCoursesState extends State<AssignedCourses> {
     }
   }
 
-  // DROPDOWN CHANGE
-
+  // Language change
   void _onLanguageChanged(String? newValue) {
     if (newValue == null) return;
 
@@ -151,35 +147,28 @@ class AssignedCoursesState extends State<AssignedCourses> {
       _selectedLanguage = newValue;
     });
 
-    // Reload courses
     _loadCourses();
   }
 
-  // TAB CHANGE
-
+  // Category tab change
   void _onCategoryChanged(int index) {
     if (index < 0 || index >= _categories.length) return;
 
     setState(() {
       _selectedCategory = _categories[index];
-      print("Selected Category: $_selectedCategory");
     });
 
-    // Reload courses
     _loadCourses();
   }
 
-  // SEARCH WITH DEBOUNCE
-
+  // Search with debounce
   void _onSearchChanged(String text) {
     _searchQuery = text;
 
-    // Cancel old timer
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel();
     }
 
-    // Wait 500ms before API call
     _debounce = Timer(const Duration(milliseconds: 500), () {
       _loadCourses();
     });
@@ -208,7 +197,7 @@ class AssignedCoursesState extends State<AssignedCourses> {
 
           const SizedBox(height: 20),
 
-          // Categories tabs
+          // Category tabs
           if (_categories.isNotEmpty)
             HorizontalTabBar(tabs: _categories, onChanged: _onCategoryChanged),
 

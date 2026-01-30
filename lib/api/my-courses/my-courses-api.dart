@@ -1,3 +1,5 @@
+// lib/api/my-courses/my-courses-api.dart
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
@@ -7,17 +9,19 @@ class GetMyCoursesApiService {
 
   // GET /my-courses
   static Future<List<CourseModel>> getMyCourses({
-    required String status ,
+    required String status, 
+    String? enrollType, 
+    String? categoryId, 
+    String? lang, 
     String? searchKey,
-    String? lang,          
     String sortingDirection = "desc",
     int pageSize = 8,
     int pageNumber = 1,
-    String orderByPropertyName = "_id", String? categoryId,
+    String orderByPropertyName = "_id",
   }) async {
     const String endpoint = "/my-courses";
 
-    // Build query params step by step
+    // Base params (always send)
     final Map<String, String> queryParams = {
       "status": status,
       "sortingDirection": sortingDirection,
@@ -26,6 +30,7 @@ class GetMyCoursesApiService {
       "orderByPropertyName": orderByPropertyName,
     };
 
+    // Optional params (send only if not null / not empty)
     if (lang != null && lang.isNotEmpty) {
       queryParams["lang"] = lang;
     }
@@ -34,13 +39,22 @@ class GetMyCoursesApiService {
       queryParams["searchKey"] = searchKey;
     }
 
-    final uri = Uri.parse(_baseUrl + endpoint).replace(
-      queryParameters: queryParams,
-    );
+    if (enrollType != null && enrollType.isNotEmpty) {
+      queryParams["enrollType"] = enrollType;
+    }
+
+    if (categoryId != null && categoryId.isNotEmpty) {
+      queryParams["categoryId"] = categoryId;
+    }
+
+    // Build full URI
+    final uri = Uri.parse(
+      _baseUrl + endpoint,
+    ).replace(queryParameters: queryParams);
 
     print("GET My Courses URI: $uri");
 
-    // Read token
+    // Read JWT token
     final token = await readSecureData("idToken");
 
     final headers = {
@@ -50,16 +64,16 @@ class GetMyCoursesApiService {
 
     // Call API
     final response = await http.get(uri, headers: headers);
-    print("response status: ${response.statusCode}");
+    print("Response Status: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       try {
         final data = jsonDecode(response.body);
 
-        // Get items list
+        // Get list from API
         final List items = data["items"];
 
-        // Convert JSON list to Model list
+        // Convert JSON list to model list
         return items.map((e) => CourseModel.fromJson(e)).toList();
       } catch (e) {
         throw Exception("JSON Decode Failed: $e");
@@ -103,7 +117,7 @@ class CourseModel {
   // JSON -> Model
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     return CourseModel(
-      id: json["_id"] ?? "", // Some APIs send _id instead of id
+      id: json["_id"] ?? "",
       title: json["title"] ?? "",
       subTitle: json["subTitle"] ?? "",
       thumbnailImage: json["thumbnailImage"] ?? "",
