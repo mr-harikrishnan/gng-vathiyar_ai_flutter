@@ -31,7 +31,7 @@ class CourseCardState extends State<CourseCard> {
         "September",
         "October",
         "November",
-        "December"
+        "December",
       ];
       final month = months[dateTime.month - 1];
       final day = dateTime.day;
@@ -48,109 +48,121 @@ class CourseCardState extends State<CourseCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image section
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Stack(
-              children: [
-                Image.network(
-                  "https://cdn.appbuild.pro/${widget.course.thumbnailImage}",
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  // Show loader while image loads
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                  // Show error icon if image fails
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(child: Icon(Icons.error));
-                  },
-                ),
-
-                // Time badge
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.access_time, size: 14),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatDuration(widget.course.courseDuration),
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+       print("Course tapped: ${widget.course.id}");
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 4),
             ),
-          ),
-
-          const SizedBox(height: 12),
-
-          // Title
-          Text(
-            widget.course.title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-
-          const SizedBox(height: 4),
-
-          // Subtitle
-          Text(
-            widget.course.subTitle,
-            style: const TextStyle(fontSize: 13, color: Colors.grey),
-          ),
-
-          const SizedBox(height: 12),
-
-          // Progress + last updated
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image section
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Stack(
                 children: [
-                  const Icon(Icons.pie_chart,
-                      size: 16, color: Color(0xFF009688)),
-                  const SizedBox(width: 4),
-                  Text(
-                    "${widget.course.completionPercent}% COMPLETED",
-                    style: const TextStyle(fontSize: 12),
+                  Image.network(
+                    "https://cdn.appbuild.pro/${widget.course.thumbnailImage}",
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    // Show loader while image loads
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                    // Show error icon if image fails
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(child: Icon(Icons.error));
+                    },
+                  ),
+
+                  // Time badge
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.access_time, size: 14),
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatDuration(widget.course.courseDuration),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
-              Text(
-                _formatUpdatedAt(widget.course.updatedAt),
-                style: const TextStyle(fontSize: 10, color: Colors.grey),
-              ),
-            ],
-          ),
-        ],
+            ),
+
+            const SizedBox(height: 12),
+
+            // Title
+            Text(
+              widget.course.title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+
+            const SizedBox(height: 4),
+
+            // Subtitle
+            Text(
+              widget.course.subTitle,
+              style: const TextStyle(fontSize: 13, color: Colors.grey),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Progress + last updated
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.pie_chart,
+                      size: 16,
+                      color: Color(0xFF009688),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      "${widget.course.completionPercent}% COMPLETED",
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+                Text(
+                  _formatUpdatedAt(widget.course.updatedAt),
+                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
