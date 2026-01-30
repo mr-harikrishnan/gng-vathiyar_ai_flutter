@@ -42,7 +42,6 @@ class MainApp extends StatelessWidget {
   }
 }
 
-
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
@@ -88,7 +87,8 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   void _goDashboard() {
-    Navigator.pushReplacementNamed(context, "/dashboard");
+    Navigator.pop(context);
+    Navigator.pushNamed(context, "/dashboard");
   }
 
   @override

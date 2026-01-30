@@ -30,7 +30,8 @@ class AppDrawer extends StatelessWidget {
             route: '/dashboard',
             currentRoute: currentRoute,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/dashboard');
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/dashboard');
             },
           ),
 
@@ -41,7 +42,8 @@ class AppDrawer extends StatelessWidget {
             route: '/mycourses',
             currentRoute: currentRoute,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/mycourses');
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/mycourses');
             },
           ),
 
@@ -52,7 +54,8 @@ class AppDrawer extends StatelessWidget {
             route: '/allcourses',
             currentRoute: currentRoute,
             onTap: () {
-              // Navigator.pushReplacementNamed(context, '/allcourses');
+              // Navigator.pop(context);
+              // Navigator.pushNamed(context, '/allcourses');
             },
           ),
 
@@ -99,12 +102,7 @@ class AppDrawer extends StatelessWidget {
   // Professional Drawer Header
   Widget _drawerHeader(GetxUserController user) {
     return Container(
-      padding: const EdgeInsets.only(
-        top: 48,
-        left: 20,
-        right: 20,
-        bottom: 16,
-      ),
+      padding: const EdgeInsets.only(top: 48, left: 20, right: 20, bottom: 16),
       decoration: const BoxDecoration(
         color: const Color(0xFFF5F7F6),
         borderRadius: BorderRadius.only(
@@ -130,10 +128,7 @@ class AppDrawer extends StatelessWidget {
               children: [
                 const Text(
                   "Logged in as",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.black54),
                 ),
 
                 const SizedBox(height: 4),
@@ -171,16 +166,8 @@ class AppDrawer extends StatelessWidget {
     required String route,
   }) {
     return ListTile(
-      leading: Icon(
-        icon,
-        color: Colors.black,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.black,
-        ),
-      ),
+      leading: Icon(icon, color: Colors.black),
+      title: Text(title, style: const TextStyle(color: Colors.black)),
       onTap: onTap,
     );
   }
