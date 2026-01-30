@@ -5,6 +5,7 @@ import 'package:vathiyar_ai_flutter/core/services/cognito-service.dart';
 import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
 import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
 import 'package:vathiyar_ai_flutter/features/auth/ui/login-screen.dart';
+import 'package:vathiyar_ai_flutter/features/course-details/course-details.dart';
 import 'package:vathiyar_ai_flutter/features/dashboard/ui/dashboard-screen.dart';
 import 'package:vathiyar_ai_flutter/features/my-courses/ui/my-courses.dart';
 
@@ -35,6 +36,7 @@ class MainApp extends StatelessWidget {
         "/login": (context) => const LoginPage(),
         "/dashboard": (context) => Dashboard(),
         "/mycourses": (context) => MyCoures(),
+        "/course-details": (context) => Coursedetails(),
       },
 
       initialRoute: "/",

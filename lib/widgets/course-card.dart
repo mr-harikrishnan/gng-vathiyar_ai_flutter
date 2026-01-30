@@ -50,7 +50,13 @@ class CourseCardState extends State<CourseCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-       print("Course tapped: ${widget.course.id}");
+        print("Course tapped: ${widget.course.id}");
+   
+        Navigator.pushNamed(
+          context,
+          '/course-details',
+          arguments: {'courseId': widget.course.id, 'courseTitle': widget.course.title},
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(12),
