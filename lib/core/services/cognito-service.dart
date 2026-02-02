@@ -1,57 +1,70 @@
-import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:get/get.dart';
-import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
-import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
-import 'package:vathiyar_ai_flutter/widgets/show-pop.dart';
+import 'package:flutter/material.dart';
 
 import '../../amplifyconfiguration.dart';
+import '../storage/secure-storage/secure-storage.dart';
+import '../../widgets/show-pop.dart';
 
 class CognitoService {
   static bool _configured = false;
 
-  static final GetxUserController _userController =
-      Get.find<GetxUserController>();
+  // SETUP AMPLIFY (RUN ONCE)
 
-  // Setup Amplify once
   static Future<void> configure() async {
     if (_configured) return;
 
     try {
       final authPlugin = AmplifyAuthCognito();
+
+      // Add plugin
       await Amplify.addPlugin(authPlugin);
+
+      // Configure Amplify
       await Amplify.configure(amplifyconfig);
 
       _configured = true;
-      print("Amplify configured");
+      debugPrint("Amplify ready");
+    } on AmplifyAlreadyConfiguredException {
+      _configured = true;
+      debugPrint("Amplify already ready");
     } catch (e) {
-      print("Amplify error: $e");
+      debugPrint("Amplify error: $e");
     }
   }
 
-  // Login function
+  // CHECK LOGIN STATUS
+
+  Future<bool> isLoggedIn() async {
+    try {
+      // Ask Amplify for session
+      final session = await Amplify.Auth.fetchAuthSession();
+
+      // Return true if user signed in
+      return session.isSignedIn;
+    } catch (e) {
+      debugPrint("Session check error: $e");
+      return false;
+    }
+  }
+
+  // SIGN IN
+
   Future<bool> signIn(
     BuildContext context,
     String email,
     String password,
   ) async {
     try {
-      // Add before signIn
-      final session = await Amplify.Auth.fetchAuthSession();
-      if (session.isSignedIn) {
-        return true;
-      }
-
       final result = await Amplify.Auth.signIn(
         username: email,
         password: password,
       );
 
-      // If login success
+      // If login success, save data
       if (result.isSignedIn) {
-        await _userController.fetchUserData();
-        await fetchCognitoAuthSession();
+        await _saveTokens();
+        await _saveUserData(email);
       }
 
       return result.isSignedIn;
@@ -62,46 +75,77 @@ class CognitoService {
       return false;
     } catch (e) {
       if (context.mounted) {
-        showPopError(context, "Unknown error during login", "Error");
+        showPopError(context, "Login failed", "Error");
       }
       return false;
     }
   }
 
-  // Logout function
+  // SIGN OUT
+
   static Future<void> signOut() async {
     try {
       await Amplify.Auth.signOut();
 
-      // Clear user data
-      _userController.clearUserData();
-
-      // Delete tokens
+      // Clear secure storage
       await deleteAllSecureData();
     } catch (e) {
-      print("Logout error: $e");
+      debugPrint("Logout error: $e");
     }
   }
 
-  // Save tokens in secure storage
-  Future<void> fetchCognitoAuthSession() async {
+  // SAVE TOKENS
+
+  Future<void> _saveTokens() async {
     try {
       final cognitoPlugin = Amplify.Auth.getPlugin(
         AmplifyAuthCognito.pluginKey,
       );
 
+      // Get auth session
       final result = await cognitoPlugin.fetchAuthSession();
 
+      // Read tokens
       final accessToken = result.userPoolTokensResult.value.accessToken.raw;
       final idToken = result.userPoolTokensResult.value.idToken.raw;
       final refreshToken = result.userPoolTokensResult.value.refreshToken;
 
-      // Store tokens securely
+      // Save in secure storage
       await writeSecureData("accessToken", accessToken);
       await writeSecureData("idToken", idToken);
       await writeSecureData("refreshToken", refreshToken);
     } catch (e) {
-      print("Token fetch error: $e");
+      debugPrint("Token save error: $e");
+    }
+  }
+
+  // SAVE USER DATA
+
+  Future<void> _saveUserData(usernameData) async {
+    try {
+      // Get current user
+      final user = await Amplify.Auth.getCurrentUser();
+      print("Current user: ${usernameData}");
+      print("User ID: ${user.userId}");
+
+      // Save user info
+      await writeSecureData("userId", user.userId);
+      await writeSecureData("username", usernameData);
+
+      // Get attributes
+      final attributes = await Amplify.Auth.fetchUserAttributes();
+
+      for (final attr in attributes) {
+        if (attr.userAttributeKey.key == 'email') {
+          await writeSecureData("email", attr.value);
+        }
+
+        if (attr.userAttributeKey.key == 'phone_number') {
+          await writeSecureData("phone_number", attr.value);
+        }
+      }
+    } catch (e) {
+      debugPrint("User data save error: $e");
     }
   }
 }

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:vathiyar_ai_flutter/core/services/cognito-service.dart';
-import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
-import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
-import 'package:vathiyar_ai_flutter/features/auth/ui/login-screen.dart';
-import 'package:vathiyar_ai_flutter/features/course-details/course-details.dart';
-import 'package:vathiyar_ai_flutter/features/dashboard/ui/dashboard-screen.dart';
-import 'package:vathiyar_ai_flutter/features/my-courses/ui/my-courses.dart';
+
+import 'features/auth/ui/login-screen.dart';
+import 'features/dashboard/ui/dashboard-screen.dart';
+import 'features/my-courses/ui/my-courses.dart';
+import 'features/course-details/course-details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Setup Amplify before app starts
+  // Setup Amplify once
   await CognitoService.configure();
 
   runApp(const MainApp());
@@ -23,26 +20,21 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      // Put GetX controller once
-      initialBinding: BindingsBuilder(() {
-        Get.put(GetxUserController(), permanent: true);
-      }),
-
+      initialRoute: "/",
       routes: {
-        "/": (context) => const AuthGate(), // This checks token
+        "/": (context) => const AuthGate(),
         "/login": (context) => const LoginPage(),
         "/dashboard": (context) => Dashboard(),
         "/mycourses": (context) => MyCoures(),
         "/course-details": (context) => Coursedetails(),
       },
-
-      initialRoute: "/",
     );
   }
 }
+
+// AUTH GATE (UI ONLY)
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -52,6 +44,8 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
+  final CognitoService _authService = CognitoService();
+
   @override
   void initState() {
     super.initState();
@@ -59,43 +53,31 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> _checkLogin() async {
-    try {
-      // Read token from secure storage
-      final accessToken = await readSecureData("accessToken");
+    // Ask service if user is logged in
+    final isLoggedIn = await _authService.isLoggedIn();
 
-      // If token is missing -> go login
-      if (accessToken == null || accessToken.isEmpty) {
-        _goLogin();
-        return;
-      }
-
-      // Ask Amplify if session is still valid
-      final session = await Amplify.Auth.fetchAuthSession();
-
-      // If session is valid -> go dashboard
-      if (session.isSignedIn) {
-        _goDashboard();
-      } else {
-        _goLogin();
-      }
-    } catch (e) {
-      // If any error -> go login
+    if (isLoggedIn) {
+      _goDashboard();
+    } else {
       _goLogin();
     }
   }
 
   void _goLogin() {
-    Navigator.pushReplacementNamed(context, "/login");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacementNamed(context, "/login");
+    });
   }
 
   void _goDashboard() {
-    Navigator.pop(context);
-    Navigator.pushNamed(context, "/dashboard");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacementNamed(context, "/dashboard");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Simple loading screen
-    return const Scaffold(body: Center(child: SizedBox()));
+    // Simple loading UI
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

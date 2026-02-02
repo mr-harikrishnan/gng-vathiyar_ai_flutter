@@ -1,15 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vathiyar_ai_flutter/core/services/cognito-service.dart';
-import 'package:vathiyar_ai_flutter/core/storage/get-x-controller/user-controller.dart';
+import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
 import 'package:vathiyar_ai_flutter/widgets/show-yes-no-dailog.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
 
   @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
+  // State variable
+
+  String userName = "Loading...";
+
+  // Runs once when widget loads
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName(); // Call async method here
+  }
+
+  // Read secure storage
+
+  Future<void> _loadUserName() async {
+    final storedUserName = await readSecureData("username");
+
+    // Update UI after async call
+    setState(() {
+      userName = storedUserName ?? "Unknown User";
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final GetxUserController user = Get.find();
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
 
     return Drawer(
@@ -18,11 +44,10 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           // Header
-          _drawerHeader(user),
+          _drawerHeader(userName),
 
           const Divider(),
 
-          // Menu items
           _drawerItem(
             context,
             icon: Icons.dashboard,
@@ -47,18 +72,6 @@ class AppDrawer extends StatelessWidget {
             },
           ),
 
-          _drawerItem(
-            context,
-            icon: Icons.menu_book,
-            title: 'All Courses',
-            route: '/allcourses',
-            currentRoute: currentRoute,
-            onTap: () {
-              // Navigator.pop(context);
-              // Navigator.pushNamed(context, '/allcourses');
-            },
-          ),
-
           const Divider(),
 
           _drawerItem(
@@ -75,53 +88,29 @@ class AppDrawer extends StatelessWidget {
               );
 
               if (result) {
-                // Sign out user
                 await CognitoService.signOut();
-
-                // Go to login page
                 Navigator.pushReplacementNamed(context, '/');
               }
             },
-          ),
-
-          const SizedBox(height: 20),
-
-          // App info
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Version: 0.0.33\nEnvironment: production',
-              style: TextStyle(fontSize: 12, color: Colors.black45),
-            ),
           ),
         ],
       ),
     );
   }
 
-  // Professional Drawer Header
-  Widget _drawerHeader(GetxUserController user) {
+  // Drawer Header
+
+  Widget _drawerHeader(String userName) {
     return Container(
       padding: const EdgeInsets.only(top: 48, left: 20, right: 20, bottom: 16),
-      decoration: const BoxDecoration(
-        color: const Color(0xFFF5F7F6),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(16),
-          bottomRight: Radius.circular(16),
-        ),
-      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const CircleAvatar(
             radius: 28,
             backgroundColor: Colors.teal,
             child: Icon(Icons.person, color: Colors.white),
           ),
-
           const SizedBox(width: 12),
-
-          // Expanded gives width so text can wrap
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,22 +119,13 @@ class AppDrawer extends StatelessWidget {
                   "Logged in as",
                   style: TextStyle(fontSize: 12, color: Colors.black54),
                 ),
-
                 const SizedBox(height: 4),
-
-                Obx(
-                  () => Text(
-                    user.email.value.isNotEmpty
-                        ? user.email.value
-                        : user.phone.value,
-                    softWrap: true,
-                    maxLines: null,
-                    overflow: TextOverflow.visible,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
+                Text(
+                  userName,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
               ],
@@ -156,7 +136,8 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  // Reusable drawer item
+  // Drawer Item
+
   Widget _drawerItem(
     BuildContext context, {
     required IconData icon,
