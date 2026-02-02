@@ -1,27 +1,41 @@
+// ===============================
+// FULL UTILS WITH LONG PRINT
+// ===============================
+
 import 'dart:convert';
 
 class Utils {
-  static void safePrintJwt(String jwt) {
+  // COMMON LONG PRINT FUNCTION
+
+  static void longPrint(String title, String text) {
+    if (text.isEmpty) {
+      print("$title: empty");
+      return;
+    }
+
+    print("========== $title ==========");
+
     const int chunkSize = 800;
 
-    for (int i = 0; i < jwt.length; i += chunkSize) {
-      int end = i + chunkSize;
-      if (end > jwt.length) {
-        end = jwt.length;
-      }
+    for (int i = 0; i < text.length; i += chunkSize) {
+      final end = (i + chunkSize < text.length) ? i + chunkSize : text.length;
 
-      print("jwt :${jwt.substring(i, end)}");
+      print(text.substring(i, end));
     }
+
+    print("========== END $title ==========");
   }
 
-  bool isValidToken(String token) {
+  // TOKEN VALIDATION
+
+  static bool isValidToken(String token) {
     try {
       // Split JWT: header.payload.signature
       final parts = token.split('.');
 
       // JWT must have 3 parts
       if (parts.length != 3) {
-        return false; // Bad format
+        return false;
       }
 
       // Decode payload (base64)
@@ -38,10 +52,9 @@ class Utils {
       // Current time in seconds
       final int now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-      // Token is valid if now < exp
+      // Token valid if now < exp
       return now < exp;
     } catch (e) {
-      // Any error = invalid token
       return false;
     }
   }

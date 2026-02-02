@@ -74,14 +74,14 @@ class _AuthGateState extends State<AuthGate> {
     try {
       // 1. Read token from secure storage
       idToken = await readSecureData("idToken");
-      Utils.safePrintJwt(idToken ?? "");
+      Utils.longPrint("ID TOKEN", idToken ?? "");
 
       // 2. Check Amplify login state
       final isLoggedIn = await _authService.isLoggedIn();
 
       // 3. Validate token
       if (isLoggedIn) {
-        final bool isValid = Utils().isValidToken(idToken ?? "");
+        final bool isValid = Utils.isValidToken(idToken ?? "");
 
         if (isValid) {
           await _goDashboard();

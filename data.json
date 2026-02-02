@@ -1,0 +1,163 @@
+{
+    "joinedCount": 0,
+    "_id": "6690bf811a686bf01f17907a",
+    "title": "No Bag Day",
+    "description": "This course will help the learners to understand the importance of organizing ‘No Bag Day’ at school. After finishing this course learners will also be able to plan and organize 'No Bag Day' at school.",
+    "subTitle": "Planning and Organising 'No Bag Day'",
+    "thumbnailImage": "course/thumbnail/fe7c76ce-0205-454b-a5cb-adfda1f70f2e.png",
+    "roleIds": [
+        "65bb9109f6f3277c19979a86",
+        "65bb91df474b2331b2f285df",
+        "65bb91a7433db45cd378b226",
+        "65e9504c382b236c93b15b14"
+    ],
+    "introContentIds": [
+        "6690c0431a686bf01f179086"
+    ],
+    "summaryContentIds": [
+        "6690cce61a686bf01f1796f6"
+    ],
+    "categoryIds": [
+        "661381b1e459227172b921a2"
+    ],
+    "courseSubjectId": "664f02e55e6edf5dbc017755",
+    "languageIds": [
+        "663b4e5a40aa2d279956d117"
+    ],
+    "criterias": [
+        {
+            "sourceId": "6690ccd11a686bf01f1796d2",
+            "type": "TEST"
+        }
+    ],
+    "numberOfEnrolled": 18,
+    "numberOfActivities": 21,
+    "courseDuration": 50,
+    "ratings": [],
+    "status": "PUBLISH",
+    "isDeleted": false,
+    "createdBy": "662b9b67ab2884460e74bfc4",
+    "updatedBy": "662214203bc38572a7e0c7f7",
+    "sections": [
+        {
+            "_id": "6690c7c71a686bf01f179295",
+            "title": "Module 1: Let's Identify the challenges",
+            "topics": [
+                {
+                    "title": "Identifying the Challenges in School",
+                    "quizId": "669ba19a8be13680e0b647fb",
+                    "isTopicCompleted": true,
+                    "isTopicQuizCompleted": true,
+                    "topicId": {
+                        "_id": "6690c7e91a686bf01f1792a9",
+                        "title": "Identifying the Challenges in School",
+                        "contentIds": [
+                            {
+                                "_id": "669ba10e8be13680e0b6478f",
+                                "contentType": "VIDEO",
+                                "url": "course/content/669ba10e8be13680e0b6478f/669ba10e8be13680e0b6478f.m3u8",
+                                "duration": 1,
+                                "sourceType": "S3_VIDEO",
+                                "id": "669ba10e8be13680e0b6478f"
+                            }
+                        ],
+                        "materials": []
+                    }
+                },
+                {
+                    "title": "Possible Challenges & Solutions",
+                    "quizId": "669ba4528be13680e0b64e31",
+                    "topicId": {
+                        "_id": "6690ca411a686bf01f1794a1",
+                        "title": "Possible Challenges & Solutions",
+                        "contentIds": [
+                            {
+                                "_id": "669ba2ab8be13680e0b6493c",
+                                "contentType": "VIDEO",
+                                "duration": 1,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669ba2ab8be13680e0b6493c/669ba2ab8be13680e0b6493c.m3u8",
+                                "id": "669ba2ab8be13680e0b6493c"
+                            }
+                        ],
+                        "materials": []
+                    }
+                }
+            ]
+        },
+        {
+            "_id": "6690cc011a686bf01f179605",
+            "title": "Module 2: Concept of No Bag Day and Policy Connect",
+            "quizId": "669ba5948be13680e0b64f4a",
+            "topics": [
+                {
+                    "title": "No Bag Day and Policy Connect",
+                    "topicId": {
+                        "_id": "669ba4c18be13680e0b64e50",
+                        "title": "No Bag Day and Policy Connect",
+                        "contentIds": [
+                            {
+                                "_id": "669ba4d78be13680e0b64e74",
+                                "contentType": "VIDEO",
+                                "duration": 3,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669ba4d78be13680e0b64e74/669ba4d78be13680e0b64e74.m3u8",
+                                "id": "669ba4d78be13680e0b64e74"
+                            }
+                        ],
+                        "materials": [
+                            {
+                                "title": "NEP 2020",
+                                "url": "course/content/b3670088-7a67-429b-801b-133acdda8cc4.pdf"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "createdAt": "2024-07-12T05:30:41.481Z",
+    "updatedAt": "2025-03-25T05:48:38.750Z",
+    "__v": 0,
+    "preTestId": "6690c77b1a686bf01f17927f",
+    "postTestId": "6690ccd11a686bf01f1796d2",
+    "certificateId": "66979cf85257c5e0c25b69b6",
+    "introduction": {
+        "_id": "669b9dba8be13680e0b6463b",
+        "contentIds": [
+            {
+                "_id": "669b9c188be13680e0b64547",
+                "contentType": "VIDEO",
+                "url": "course/content/669b9c188be13680e0b64547/669b9c188be13680e0b64547.m3u8",
+                "duration": 1,
+                "sourceType": "S3_VIDEO",
+                "id": "669b9c188be13680e0b64547"
+            }
+        ]
+    },
+    "summary": {
+        "_id": "669c93d78be13680e0b65d25",
+        "contentIds": [
+            {
+                "_id": "669c93d78be13680e0b65d10",
+                "url": "course/content/2743f220-baf6-4fa4-bb88-87dff1b92033.pdf",
+                "contentType": "PDF",
+                "sourceType": "S3_VIDEO",
+                "duration": 0,
+                "id": "669c93d78be13680e0b65d10"
+            }
+        ]
+    },
+    "relatedLanguageCourses": [],
+    "contentUpdateAt": "2026-02-02T07:34:21.826Z",
+    "isIntroCompleted": true,
+    "isPreTestCompleted": true,
+    "rating": {
+        "averageRating": 4.33,
+        "ratingCount": 3,
+        "totalRating": 13,
+        "isUserRated": false,
+        "myRating": null
+    },
+    "learnerCourseStatus": "IN_PROGRESS"
+}
