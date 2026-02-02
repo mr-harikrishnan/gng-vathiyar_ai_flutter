@@ -2,7 +2,7 @@
     "joinedCount": 0,
     "_id": "6690bf811a686bf01f17907a",
     "title": "No Bag Day",
-    "description": "This course will help the learners to understand the importance of organizing ‘No Bag Day’ at school. After finishing this course learners will also be able to plan and organize 'No Bag Day' at school.",
+    "description": "This course will help the learners to understand the importance of organizing ‘No Bag Day’ at school. After finishing this course learners will also be able to plan and organize 'No Bag Day' at school. ",
     "subTitle": "Planning and Organising 'No Bag Day'",
     "thumbnailImage": "course/thumbnail/fe7c76ce-0205-454b-a5cb-adfda1f70f2e.png",
     "roleIds": [
@@ -40,17 +40,12 @@
     "updatedBy": "662214203bc38572a7e0c7f7",
     "sections": [
         {
-            "_id": "6690c7c71a686bf01f179295",
-            "title": "Module 1: Let's Identify the challenges",
+            "title": "Module 1: Let's Identify the challenges ",
             "topics": [
                 {
-                    "title": "Identifying the Challenges in School",
-                    "quizId": "669ba19a8be13680e0b647fb",
-                    "isTopicCompleted": true,
-                    "isTopicQuizCompleted": true,
                     "topicId": {
                         "_id": "6690c7e91a686bf01f1792a9",
-                        "title": "Identifying the Challenges in School",
+                        "title": "Identifying the Challenges in School ",
                         "contentIds": [
                             {
                                 "_id": "669ba10e8be13680e0b6478f",
@@ -62,11 +57,13 @@
                             }
                         ],
                         "materials": []
-                    }
+                    },
+                    "title": "Identifying the Challenges in School ",
+                    "quizId": "669ba19a8be13680e0b647fb",
+                    "isTopicCompleted": true,
+                    "isTopicQuizCompleted": true
                 },
                 {
-                    "title": "Possible Challenges & Solutions",
-                    "quizId": "669ba4528be13680e0b64e31",
                     "topicId": {
                         "_id": "6690ca411a686bf01f1794a1",
                         "title": "Possible Challenges & Solutions",
@@ -81,17 +78,17 @@
                             }
                         ],
                         "materials": []
-                    }
+                    },
+                    "title": "Possible Challenges & Solutions",
+                    "quizId": "669ba4528be13680e0b64e31"
                 }
-            ]
+            ],
+            "_id": "6690c7c71a686bf01f179295"
         },
         {
-            "_id": "6690cc011a686bf01f179605",
             "title": "Module 2: Concept of No Bag Day and Policy Connect",
-            "quizId": "669ba5948be13680e0b64f4a",
             "topics": [
                 {
-                    "title": "No Bag Day and Policy Connect",
                     "topicId": {
                         "_id": "669ba4c18be13680e0b64e50",
                         "title": "No Bag Day and Policy Connect",
@@ -111,9 +108,200 @@
                                 "url": "course/content/b3670088-7a67-429b-801b-133acdda8cc4.pdf"
                             }
                         ]
-                    }
+                    },
+                    "title": "No Bag Day and Policy Connect"
                 }
-            ]
+            ],
+            "quizId": "669ba5948be13680e0b64f4a",
+            "_id": "6690cc011a686bf01f179605"
+        },
+        {
+            "title": "Module 3: Focus areas of No Bag Day",
+            "topics": [
+                {
+                    "topicId": {
+                        "_id": "669ba5dd8be13680e0b64f69",
+                        "title": "Focus areas of No Bag Day",
+                        "contentIds": [
+                            {
+                                "_id": "669ba6138be13680e0b64f8d",
+                                "contentType": "VIDEO",
+                                "duration": 5,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669ba6138be13680e0b64f8d/669ba6138be13680e0b64f8d.m3u8",
+                                "id": "669ba6138be13680e0b64f8d"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "Focus areas of No Bag Day",
+                    "quizId": "669bbc228be13680e0b655eb"
+                }
+            ],
+            "_id": "6690cfc91a686bf01f179a46"
+        },
+        {
+            "title": "Module 4: Involvement of Stakeholders",
+            "topics": [
+                {
+                    "topicId": {
+                        "_id": "669bbc798be13680e0b65631",
+                        "title": "Involvement of Stakeholders",
+                        "contentIds": [
+                            {
+                                "_id": "669bbcc38be13680e0b65658",
+                                "contentType": "VIDEO",
+                                "duration": 2,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669bbcc38be13680e0b65658/669bbcc38be13680e0b65658.m3u8",
+                                "id": "669bbcc38be13680e0b65658"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "Involvement of Stakeholders",
+                    "quizId": "669bbe578be13680e0b656d5"
+                }
+            ],
+            "_id": "669bbc5c8be13680e0b6560c"
+        },
+        {
+            "title": "Module 5: Process of organizing a No Bag Day",
+            "topics": [
+                {
+                    "topicId": {
+                        "_id": "669bbfa98be13680e0b65720",
+                        "title": "Process of Organizing a ‘No Bag Day’",
+                        "contentIds": [
+                            {
+                                "_id": "669bbfdc8be13680e0b6574a",
+                                "contentType": "VIDEO",
+                                "duration": 2,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669bbfdc8be13680e0b6574a/669bbfdc8be13680e0b6574a.m3u8",
+                                "id": "669bbfdc8be13680e0b6574a"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "Process of Organizing a ‘No Bag Day’"
+                },
+                {
+                    "topicId": {
+                        "_id": "669bc1138be13680e0b65804",
+                        "title": "Let's organize a 'No Bag Day' on Road Safety (Pre Activity)",
+                        "contentIds": [
+                            {
+                                "_id": "669bc1498be13680e0b6582e",
+                                "contentType": "VIDEO",
+                                "url": "course/content/669bc1498be13680e0b6582e/669bc1498be13680e0b6582e.m3u8",
+                                "duration": 2,
+                                "sourceType": "S3_VIDEO",
+                                "id": "669bc1498be13680e0b6582e"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "Let's organize a 'No Bag Day' on Road Safety (Pre Activity)"
+                },
+                {
+                    "topicId": {
+                        "_id": "669c8c7f8be13680e0b658db",
+                        "title": "'No Bag Day' on Road Safety (During Activity -1)",
+                        "contentIds": [
+                            {
+                                "_id": "669c8cb38be13680e0b65905",
+                                "contentType": "VIDEO",
+                                "duration": 3,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669c8cb38be13680e0b65905/669c8cb38be13680e0b65905.m3u8",
+                                "id": "669c8cb38be13680e0b65905"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "'No Bag Day' on Road Safety (During Activity -1)"
+                },
+                {
+                    "topicId": {
+                        "_id": "669c8dc78be13680e0b65970",
+                        "title": "Using video on Road Safety ",
+                        "contentIds": [
+                            {
+                                "_id": "669c8e1b8be13680e0b6599a",
+                                "url": "https://www.youtube.com/embed/SP72F6Llvkc?si=1ufZfRgagXL9Pel2",
+                                "contentType": "VIDEO",
+                                "sourceType": "YOUTUBE_VIDEO",
+                                "duration": 4,
+                                "id": "669c8e1b8be13680e0b6599a"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "Using video on Road Safety "
+                },
+                {
+                    "topicId": {
+                        "_id": "669c8e8e8be13680e0b659bf",
+                        "title": "'No Bag Day' on Road Safety (During Activity -2)",
+                        "contentIds": [
+                            {
+                                "_id": "669c8ea58be13680e0b659e9",
+                                "contentType": "VIDEO",
+                                "duration": 3,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669c8ea58be13680e0b659e9/669c8ea58be13680e0b659e9.m3u8",
+                                "id": "669c8ea58be13680e0b659e9"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "'No Bag Day' on Road Safety (During Activity -2)"
+                },
+                {
+                    "topicId": {
+                        "_id": "669c907e8be13680e0b65b12",
+                        "title": "'No Bag Day' on Road Safety (Post Activity)",
+                        "contentIds": [
+                            {
+                                "_id": "669c90b28be13680e0b65b3c",
+                                "contentType": "VIDEO",
+                                "duration": 3,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/669c90b28be13680e0b65b3c/669c90b28be13680e0b65b3c.m3u8",
+                                "id": "669c90b28be13680e0b65b3c"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "'No Bag Day' on Road Safety (Post Activity)"
+                }
+            ],
+            "_id": "669bbf678be13680e0b656f7"
+        },
+        {
+            "title": "Concluding Video",
+            "topics": [
+                {
+                    "topicId": {
+                        "_id": "66aa02493e373fa0a4510279",
+                        "title": "Concluding Video",
+                        "contentIds": [
+                            {
+                                "_id": "66aa037f3e373fa0a45102d6",
+                                "contentType": "VIDEO",
+                                "duration": 2,
+                                "sourceType": "S3_VIDEO",
+                                "url": "course/content/66aa037f3e373fa0a45102d6/66aa037f3e373fa0a45102d6.m3u8",
+                                "id": "66aa037f3e373fa0a45102d6"
+                            }
+                        ],
+                        "materials": []
+                    },
+                    "title": "Concluding Video"
+                }
+            ],
+            "_id": "669c912c8be13680e0b65b8c"
         }
     ],
     "createdAt": "2024-07-12T05:30:41.481Z",
@@ -123,7 +311,6 @@
     "postTestId": "6690ccd11a686bf01f1796d2",
     "certificateId": "66979cf85257c5e0c25b69b6",
     "introduction": {
-        "_id": "669b9dba8be13680e0b6463b",
         "contentIds": [
             {
                 "_id": "669b9c188be13680e0b64547",
@@ -133,10 +320,10 @@
                 "sourceType": "S3_VIDEO",
                 "id": "669b9c188be13680e0b64547"
             }
-        ]
+        ],
+        "_id": "669b9dba8be13680e0b6463b"
     },
     "summary": {
-        "_id": "669c93d78be13680e0b65d25",
         "contentIds": [
             {
                 "_id": "669c93d78be13680e0b65d10",
@@ -146,10 +333,11 @@
                 "duration": 0,
                 "id": "669c93d78be13680e0b65d10"
             }
-        ]
+        ],
+        "_id": "669c93d78be13680e0b65d25"
     },
     "relatedLanguageCourses": [],
-    "contentUpdateAt": "2026-02-02T07:34:21.826Z",
+    "contentUpdateAt": "2026-02-02T08:41:44.420Z",
     "isIntroCompleted": true,
     "isPreTestCompleted": true,
     "rating": {
