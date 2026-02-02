@@ -12,13 +12,13 @@ class Coursedetails extends StatefulWidget {
 class CoursedetailsState extends State<Coursedetails> {
   String _courseId = "";
   String _courseTitle = "";
-
-  List<SectionModel> _sections = [];
+  dynamic modulesData;
 
   bool _loading = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  //get courseId and courseTitle from arguments
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -37,14 +37,22 @@ class CoursedetailsState extends State<Coursedetails> {
     setState(() => _loading = true);
 
     try {
-      final model = await GetCourseModuleApiService.getCourseModule(
+      // Get ANY type from API
+      final data = await GetCourseModuleApiService.getCourseModule(
         courseId: _courseId,
       );
 
-      setState(() {
-        _sections = model.sections;
-        _loading = false;
-      });
+      // Check JSON type
+      if ( data is Map<String, dynamic>) {
+        setState(() {
+          // Read sections directly from API JSON
+          modulesData = data;
+          _loading = false;
+        });
+
+      } else {
+        throw Exception("Invalid API format");
+      }
     } catch (e) {
       setState(() => _loading = false);
       print("API Error: $e");
@@ -68,7 +76,7 @@ class CoursedetailsState extends State<Coursedetails> {
       ),
       endDrawer: CourseModuleSideBar(
         courseTitle: _courseTitle,
-        sections: _sections,
+        data: modulesData, // Send RAW JSON
       ),
       body: Center(
         child: _loading

@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
 
-class CourseModuleSideBar extends StatelessWidget {
+class CourseModuleSideBar extends StatefulWidget {
   final String courseTitle;
-  final List<SectionModel> sections;
-  final bool isIntroCompleted;
-  final bool isPreTestCompleted;
+  final data;
 
   const CourseModuleSideBar({
     super.key,
     required this.courseTitle,
-    required this.sections,
-    this.isIntroCompleted = false,
-    this.isPreTestCompleted = false,
+    required this.data,
   });
+
+  @override
+  State<CourseModuleSideBar> createState() => _CourseModuleSideBarState();
+}
+
+class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
+  var datas;
+
+  @override
+  void initState() {
+    super.initState();
+    datas = widget.data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,71 +52,22 @@ class CourseModuleSideBar extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  // INTRO
-                  _buildModuleItem(
-                    title: "Introduction to the Session",
-                    isCompleted: isIntroCompleted,
+                  _simpleRow(
+                    "Introduction to the Session",
+                    datas["isIntroCompleted"] == true ? true : false,
                   ),
+                  const Divider(height: 1),
 
-                  // PRE-TEST
-                  _buildModuleItem(
-                    title: "Pre-Test",
-                    isCompleted: isPreTestCompleted,
+                  _simpleRow(
+                    "Pre-Test",
+                    datas["isPreTestCompleted"] == true ? true : false,
                   ),
-
-                  // SECTIONS
-                  ...sections.map((section) {
-                    return _buildExpandableModule(
-                      title: section.title,
-                      children: section.topics.map((topic) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // -------- TOPIC ROW --------
-                            // Always open, never locked
-                            _buildSubModuleItem(
-                              title: topic.title,
-                              isCompleted: topic.isCompleted,
-                              isLocked: false,
-                              onTap: () {
-                                Navigator.pop(context);
-                                print("Open topic: ${topic.title}");
-                              },
-                            ),
-
-                            // -------- QUIZ ROW --------
-                            // Show only if quiz exists
-                            if (topic.quizId != null)
-                              _buildSubModuleItem(
-                                title: "Quiz",
-                                isCompleted: topic.isQuizCompleted,
-                                isLocked: topic.isCompleted == false,
-                                onTap: () {
-                                  if (topic.isCompleted) {
-                                    Navigator.pop(context);
-                                    print("Open quiz: ${topic.quizId}");
-                                  }
-                                },
-                              ),
-                          ],
-                        );
-                      }).toList(),
-                    );
-                  }).toList(),
-
-                  // SUMMARY
-                  _buildModuleItem(
-                    title: "Summary",
-                    isCompleted: false,
-                    isLocked: true,
-                  ),
-
-                  // CERTIFICATE
-                  _buildModuleItem(
-                    title: "Certificate",
-                    isCompleted: false,
-                    isLocked: true,
-                  ),
+                  const Divider(height: 1),
+                  // Modules from API
+                  for (var section in datas["sections"] ?? []) ...[
+                    _buildSection(section),
+                    const Divider(height: 1),
+                  ],
                 ],
               ),
             ),
@@ -117,60 +76,83 @@ class CourseModuleSideBar extends StatelessWidget {
       ),
     );
   }
+}
 
-  // ---------------- HELPERS ----------------
+// One module
+Widget _buildSection(Map<String, dynamic> section) {
+  final List topics = section["topics"] ?? [];
 
-  Widget _buildModuleItem({
-    required String title,
-    required bool isCompleted,
-    bool isLocked = false,
-  }) {
-    return ListTile(
-      title: Text(title, style: const TextStyle(fontSize: 14)),
-      trailing: _getIcon(isCompleted, isLocked),
-      onTap: isLocked ? null : () {},
-    );
-  }
-
-  Widget _buildExpandableModule({
-    required String title,
-    required List<Widget> children,
-  }) {
-    return Theme(
-      data: ThemeData(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        title: Text(title, style: const TextStyle(fontSize: 14)),
-        children: children,
+  return ExpansionTile(
+    title: GestureDetector(
+      onTap: () {
+        // Print module title
+        print("CLICKED MODULE: ${section["title"]}");
+      },
+      child: Text(
+        section["title"] ?? "Module",
+        style: const TextStyle(fontWeight: FontWeight.w600),
       ),
-    );
-  }
+    ),
+    children: [
+      for (var topic in topics) ...[
+        _topicRow(topic["title"] ?? "Topic", topic["isTopicCompleted"] == true),
 
-  Widget _buildSubModuleItem({
-    required String title,
-    required bool isCompleted,
-    required bool isLocked,
-    VoidCallback? onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: ListTile(
-        title: Text(title, style: const TextStyle(fontSize: 14)),
-        trailing: _getIcon(isCompleted, isLocked),
-        onTap: isLocked ? null : onTap,
-      ),
-    );
-  }
+        (topic["quizId"] != null)
+            ? _quizRow(
+                topic["title"] ?? "Topic",
+                topic["isTopicQuizCompleted"] == true,
+              )
+            : const SizedBox.shrink(),
+      ],
+    ],
+  );
+}
 
+// Top rows
+Widget _simpleRow(String title, bool done) {
+  return ListTile(
+    title: Text(title),
+    trailing: Icon(
+      done ? Icons.check_circle : Icons.lock,
+      color: done ? Color(0xFF006A63) : Colors.grey,
+    ),
+    onTap: () {
+      // Print row text
+      print("CLICKED: $title");
+    },
+  );
+}
 
-  Widget _getIcon(bool isCompleted, bool isLocked) {
-    if (isCompleted) {
-      return const Icon(Icons.check_circle, color: Color(0xFF006A63), size: 18);
-    }
+// Topic row
+Widget _topicRow(String title, bool done) {
+  return ListTile(
+    contentPadding: const EdgeInsets.only(left: 32, right: 16),
+    title: Text(title),
+    trailing: Icon(
+      done ? Icons.check_circle : Icons.lock,
+      color: done ? Color(0xFF006A63) : Colors.grey,
+      size: 20,
+    ),
+    onTap: () {
+      // Print topic title
+      print("CLICKED TOPIC: $title");
+    },
+  );
+}
 
-    if (isLocked) {
-      return const Icon(Icons.lock_outline, size: 18);
-    }
-
-    return const SizedBox.shrink();
-  }
+// Quiz row
+Widget _quizRow(String topicTitle, bool done) {
+  return ListTile(
+    contentPadding: const EdgeInsets.only(left: 48, right: 16),
+    title: const Text("Quiz"),
+    trailing: Icon(
+      done ? Icons.check_circle : Icons.lock,
+      color: done ? Color(0xFF006A63) : Colors.grey,
+      size: 20,
+    ),
+    onTap: () {
+      // Print quiz under which topic
+      print("CLICKED QUIZ FOR: $topicTitle");
+    },
+  );
 }
