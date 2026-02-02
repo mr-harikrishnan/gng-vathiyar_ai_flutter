@@ -40,7 +40,7 @@ class CognitoService {
       // Add before signIn
       final session = await Amplify.Auth.fetchAuthSession();
       if (session.isSignedIn) {
-        return true; 
+        return true;
       }
 
       final result = await Amplify.Auth.signIn(
