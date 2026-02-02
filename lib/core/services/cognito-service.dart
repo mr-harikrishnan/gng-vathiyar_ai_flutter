@@ -37,8 +37,11 @@ class CognitoService {
     String password,
   ) async {
     try {
-      // Always logout before login
-      await signOut();
+      // Add before signIn
+      final session = await Amplify.Auth.fetchAuthSession();
+      if (session.isSignedIn) {
+        return true; 
+      }
 
       final result = await Amplify.Auth.signIn(
         username: email,
