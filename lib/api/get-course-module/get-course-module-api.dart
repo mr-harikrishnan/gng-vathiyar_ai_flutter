@@ -1,7 +1,3 @@
-// lib/api/get-course-module/get_course_module_api.dart
-// FULL MODEL + API
-// This fixes quiz status and avoids UI repeat issues
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
@@ -9,47 +5,37 @@ import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.d
 class GetCourseModuleApiService {
   static const String _baseUrl = "https://devapi.appbuild.pro";
 
-  // GET /learner-courses/{courseId}
   static Future<CourseModuleModel> getCourseModule({
     required String courseId,
   }) async {
-    final String endpoint = "/learner-courses/$courseId";
+    final uri = Uri.parse("$_baseUrl/learner-courses/$courseId");
 
-    final uri = Uri.parse(_baseUrl + endpoint);
-
-    // Read JWT token
+    // Read token
     final token = await readSecureData("idToken");
 
-    final headers = {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-    };
+    final response = await http.get(
+      uri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
 
-    final response = await http.get(uri, headers: headers);
-
-    if (response.statusCode == 200) {
-      try {
-        final data = jsonDecode(response.body);
-
-        // Convert JSON -> model
-        return CourseModuleModel.fromJson(data);
-      } catch (e) {
-        throw Exception("JSON Decode Failed: $e");
-      }
-    } else {
-      throw Exception("GET Failed: ${response.statusCode}");
+    if (response.statusCode != 200) {
+      throw Exception("API Failed: ${response.statusCode}");
     }
+
+    final data = jsonDecode(response.body);
+    return CourseModuleModel.fromJson(data);
   }
 }
 
 // ------------------ MODELS ------------------
 
-// Main course model
+// Main model
 class CourseModuleModel {
   final String id;
   final String title;
-  final String description;
-  final String status;
   final bool isIntroCompleted;
   final bool isPreTestCompleted;
   final List<SectionModel> sections;
@@ -57,8 +43,6 @@ class CourseModuleModel {
   CourseModuleModel({
     required this.id,
     required this.title,
-    required this.description,
-    required this.status,
     required this.isIntroCompleted,
     required this.isPreTestCompleted,
     required this.sections,
@@ -68,10 +52,8 @@ class CourseModuleModel {
     return CourseModuleModel(
       id: json["_id"].toString(),
       title: json["title"].toString(),
-      description: json["description"].toString(),
-      status: json["learnerCourseStatus"].toString(),
 
-      // Flags for top rows
+      // Default false if API sends null
       isIntroCompleted: json["isIntroCompleted"] == true,
       isPreTestCompleted: json["isPreTestCompleted"] == true,
 
@@ -82,7 +64,7 @@ class CourseModuleModel {
   }
 }
 
-// Section model
+// Section = Module
 class SectionModel {
   final String id;
   final String title;
@@ -101,7 +83,7 @@ class SectionModel {
   }
 }
 
-// Topic model
+// Topic
 class TopicModel {
   final String title;
   final bool isCompleted;
@@ -118,17 +100,19 @@ class TopicModel {
   });
 
   factory TopicModel.fromJson(Map<String, dynamic> json) {
+    final rawQuizId = json["quizId"];
+
     return TopicModel(
       title: json["title"].toString(),
 
-      // Video / content completed
+      // Always true or false
       isCompleted: json["isTopicCompleted"] == true,
-
-      // Quiz completed
       isQuizCompleted: json["isTopicQuizCompleted"] == true,
 
-      // Quiz ID for navigation
-      quizId: json["quizId"]?.toString(),
+      // Only set real quiz id
+      quizId: (rawQuizId != null && rawQuizId.toString().isNotEmpty)
+          ? rawQuizId.toString()
+          : null,
 
       contents: (json["topicId"]["contentIds"] as List)
           .map((e) => ContentModel.fromJson(e))
@@ -137,7 +121,7 @@ class TopicModel {
   }
 }
 
-// Content model
+// Content
 class ContentModel {
   final String id;
   final String type;

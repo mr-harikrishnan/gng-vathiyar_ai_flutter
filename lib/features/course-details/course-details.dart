@@ -13,51 +13,40 @@ class CoursedetailsState extends State<Coursedetails> {
   String _courseId = "";
   String _courseTitle = "";
 
-  // Store sections here
   List<SectionModel> _sections = [];
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   bool _loading = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Get route args only once
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     if (args != null && _courseId.isEmpty) {
       _courseId = args["courseId"] ?? "";
       _courseTitle = args["courseTitle"] ?? "";
-
-      // Call API after getting courseId
       _loadCourseModules();
     }
   }
 
   Future<void> _loadCourseModules() async {
-    try {
-      setState(() {
-        _loading = true;
-      });
+    setState(() => _loading = true);
 
-      // Call API
-      final courseModel = await GetCourseModuleApiService.getCourseModule(
+    try {
+      final model = await GetCourseModuleApiService.getCourseModule(
         courseId: _courseId,
       );
 
-      // Save sections from API
       setState(() {
-        _sections = courseModel.sections;
+        _sections = model.sections;
         _loading = false;
       });
     } catch (e) {
-      setState(() {
-        _loading = false;
-      });
-
+      setState(() => _loading = false);
       print("API Error: $e");
     }
   }
@@ -72,7 +61,6 @@ class CoursedetailsState extends State<Coursedetails> {
           IconButton(
             icon: const Icon(Icons.menu),
             onPressed: () {
-              // Open right side drawer
               _scaffoldKey.currentState?.openEndDrawer();
             },
           ),
@@ -80,20 +68,12 @@ class CoursedetailsState extends State<Coursedetails> {
       ),
       endDrawer: CourseModuleSideBar(
         courseTitle: _courseTitle,
-
-        // Pass sections to sidebar
         sections: _sections,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: _loading
-                  ? const CircularProgressIndicator()
-                  : const Text('Course Content'),
-            ),
-          ),
-        ],
+      body: Center(
+        child: _loading
+            ? const CircularProgressIndicator()
+            : const Text("Course Content"),
       ),
     );
   }
