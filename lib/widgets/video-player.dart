@@ -14,6 +14,7 @@ class ChewieVideoPlayer extends StatefulWidget {
 class _ChewieVideoPlayerState extends State<ChewieVideoPlayer> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
+  bool _showOverlay = true;
 
   @override
   void initState() {
@@ -65,7 +66,32 @@ class _ChewieVideoPlayerState extends State<ChewieVideoPlayer> {
                   borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
                     aspectRatio: _videoPlayerController.value.aspectRatio,
-                    child: Chewie(controller: _chewieController!),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Chewie(controller: _chewieController!),
+
+                        if (_showOverlay)
+                          GestureDetector(
+                            onTap: () {
+                              _videoPlayerController.play();
+                              setState(() {
+                                _showOverlay = false;
+                              });
+                            },
+                            child: Container(
+                              color: Colors.black.withOpacity(0.3),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.play_circle_fill,
+                                  size: 80,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
