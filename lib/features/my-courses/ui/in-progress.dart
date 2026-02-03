@@ -114,6 +114,8 @@ class InProgressState extends State<InProgress> {
   void _onLanguageChanged(String? newValue) {
     if (newValue == null) return;
 
+    if (newValue == _selectedLanguage) return;
+
     setState(() {
       _selectedLanguage = newValue;
     });
@@ -124,6 +126,10 @@ class InProgressState extends State<InProgress> {
   // Search with debounce
   void _onSearchChanged(String text) {
     _searchQuery = text;
+
+    if (text.isEmpty) {
+      return;
+    }
 
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel();

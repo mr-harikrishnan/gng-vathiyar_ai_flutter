@@ -143,6 +143,8 @@ class AssignedCoursesState extends State<AssignedCourses> {
   void _onLanguageChanged(String? newValue) {
     if (newValue == null) return;
 
+    if (newValue == _selectedLanguage) return;
+
     setState(() {
       _selectedLanguage = newValue;
     });
@@ -152,6 +154,7 @@ class AssignedCoursesState extends State<AssignedCourses> {
 
   // Category tab change
   void _onCategoryChanged(int index) {
+    if (_selectedCategory == _categories[index]) return;
     if (index < 0 || index >= _categories.length) return;
 
     setState(() {
@@ -164,6 +167,10 @@ class AssignedCoursesState extends State<AssignedCourses> {
   // Search with debounce
   void _onSearchChanged(String text) {
     _searchQuery = text;
+
+    if (text.isEmpty) {
+      return;
+    }
 
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel();
