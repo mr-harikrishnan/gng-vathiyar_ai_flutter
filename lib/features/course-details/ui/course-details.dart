@@ -15,7 +15,6 @@ class CoursedetailsState extends State<Coursedetails> {
   String _courseTitle = "";
   dynamic modulesData;
 
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   //get courseId and courseTitle from arguments
@@ -34,7 +33,6 @@ class CoursedetailsState extends State<Coursedetails> {
   }
 
   Future<void> _loadCourseModules() async {
-
     try {
       // Get ANY type from API
       final data = await GetCourseModuleApiService.getCourseModule(
