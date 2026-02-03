@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
-import 'package:video_player/video_player.dart';
 
 class CourseDetailsVideo extends StatefulWidget {
   const CourseDetailsVideo({super.key});

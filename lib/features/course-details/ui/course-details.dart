@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
 import 'package:vathiyar_ai_flutter/features/course-details/ui/course-details-video.dart';
 import 'package:vathiyar_ai_flutter/widgets/course-module-side-bar.dart';
-import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
 
 class Coursedetails extends StatefulWidget {
   const Coursedetails({super.key});
@@ -16,7 +15,6 @@ class CoursedetailsState extends State<Coursedetails> {
   String _courseTitle = "";
   dynamic modulesData;
 
-  bool _loading = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,7 +34,6 @@ class CoursedetailsState extends State<Coursedetails> {
   }
 
   Future<void> _loadCourseModules() async {
-    setState(() => _loading = true);
 
     try {
       // Get ANY type from API
@@ -49,13 +46,11 @@ class CoursedetailsState extends State<Coursedetails> {
         setState(() {
           // Read sections directly from API JSON
           modulesData = data;
-          _loading = false;
         });
       } else {
         throw Exception("Invalid API format");
       }
     } catch (e) {
-      setState(() => _loading = false);
       print("API Error: $e");
     }
   }
