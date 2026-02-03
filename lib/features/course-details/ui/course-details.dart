@@ -34,15 +34,12 @@ class CoursedetailsState extends State<Coursedetails> {
 
   Future<void> _loadCourseModules() async {
     try {
-      // Get ANY type from API
       final data = await GetCourseModuleApiService.getCourseModule(
         courseId: _courseId,
       );
 
-      // Check JSON type
       if (data is Map<String, dynamic>) {
         setState(() {
-          // Read sections directly from API JSON
           modulesData = data;
         });
       } else {
@@ -57,6 +54,7 @@ class CoursedetailsState extends State<Coursedetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      //Content side bar
       appBar: AppBar(
         title: Text(_courseTitle),
         actions: [
@@ -70,12 +68,13 @@ class CoursedetailsState extends State<Coursedetails> {
       ),
       endDrawer: CourseModuleSideBar(
         courseTitle: _courseTitle,
-        data: modulesData, // Send RAW JSON
+        data: modulesData,
       ),
       body: Container(
-        color: Colors.grey.shade200, // your background color
+        color: Colors.grey.shade200,
         child: const Padding(
           padding: EdgeInsets.all(20),
+          //Course details Video Screen
           child: CourseDetailsVideo(),
         ),
       ),

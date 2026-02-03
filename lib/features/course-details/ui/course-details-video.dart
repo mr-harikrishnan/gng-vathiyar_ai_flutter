@@ -12,6 +12,8 @@ class CourseDetailsVideo extends StatefulWidget {
 }
 
 class CourseDetailsVideoState extends State<CourseDetailsVideo> {
+  bool isCompleted = true;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,16 +23,20 @@ class CourseDetailsVideoState extends State<CourseDetailsVideo> {
           alignment: Alignment.topRight,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF006A63),
+              backgroundColor: isCompleted == true
+                  ? Color(0xFF006A63)
+                  : Colors.grey.shade100,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
             onPressed: (() => print("btn pressed")),
             child: Text(
-              "Mark As Completed",
+              isCompleted == true ? "Completed" : "Mark As Completed",
               style: TextStyle(
-                color: Colors.white,
+                color: isCompleted == true
+                    ? Colors.white
+                    : Colors.grey.shade600,
                 fontWeight: FontWeight.w400,
               ),
             ),
