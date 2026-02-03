@@ -1,5 +1,3 @@
-// lib/api/my-courses/my-courses-api.dart
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
