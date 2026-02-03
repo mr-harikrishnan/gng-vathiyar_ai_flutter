@@ -1,8 +1,14 @@
+// FULL WORKING CODE
+// ICON RULE:
+// - done == true      -> check_circle (green)
+// - first row after last done -> star_outline (orange)
+// - rest             -> lock (grey)
+
 import 'package:flutter/material.dart';
 
 class CourseModuleSideBar extends StatefulWidget {
   final String courseTitle;
-  final data;
+  final dynamic data;
 
   const CourseModuleSideBar({
     super.key,
@@ -15,7 +21,10 @@ class CourseModuleSideBar extends StatefulWidget {
 }
 
 class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
-  var datas;
+  late Map<String, dynamic> datas;
+
+  int rowNumber = 0;
+  int _lastDoneRow = 0;
 
   @override
   void initState() {
@@ -25,48 +34,34 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
 
   @override
   Widget build(BuildContext context) {
+    // // Reset on every build
+    rowNumber = 0;
+    _lastDoneRow = 0;
+
     return Drawer(
       child: SafeArea(
         child: Column(
           children: [
-            // ---------------- HEADER ----------------
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Modules",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-            ),
+            _header(),
+
             const Divider(height: 1),
 
-            // ---------------- LIST ----------------
             Expanded(
               child: ListView(
                 children: [
                   _simpleRow(
                     "Introduction to the Session",
-                    datas["isIntroCompleted"] == true ? true : false,
+                    datas["isIntroCompleted"] == true,
                   ),
+
                   const Divider(height: 1),
 
-                  _simpleRow(
-                    "Pre-Test",
-                    datas["isPreTestCompleted"] == true ? true : false,
-                  ),
+                  _simpleRow("Pre-Test", datas["isPreTestCompleted"] == true),
+
                   const Divider(height: 1),
-                  // Modules from API
+
                   for (var section in datas["sections"] ?? []) ...[
                     _buildSection(section),
-                    const Divider(height: 1),
                   ],
                 ],
               ),
@@ -76,83 +71,117 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
       ),
     );
   }
-}
 
-// One module
-Widget _buildSection(Map<String, dynamic> section) {
-  final List topics = section["topics"] ?? [];
-
-  return ExpansionTile(
-    title: GestureDetector(
-      onTap: () {
-        // Print module title
-        print("CLICKED MODULE: ${section["title"]}");
-      },
-      child: Text(
-        section["title"] ?? "Module",
-        style: const TextStyle(fontWeight: FontWeight.w600),
+  //  HEADER
+  Widget _header() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Modules",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
       ),
-    ),
-    children: [
-      for (var topic in topics) ...[
-        _topicRow(topic["title"] ?? "Topic", topic["isTopicCompleted"] == true),
+    );
+  }
 
-        (topic["quizId"] != null)
-            ? _quizRow(
-                topic["title"] ?? "Topic",
-                topic["isTopicQuizCompleted"] == true,
-              )
-            : const SizedBox.shrink(),
+  //  ICON LOGIC
+  Icon _getIcon(bool done, int thisRow) {
+    if (done) {
+      _lastDoneRow = thisRow;
+      return const Icon(Icons.check_circle, color: Color(0xFF006A63));
+    }
+
+    if (thisRow == _lastDoneRow + 1) {
+      return const Icon(Icons.check_circle, color: Colors.transparent);
+    }
+
+    return const Icon(Icons.lock, color: Colors.grey);
+  }
+
+  //  SECTION
+  Widget _buildSection(Map<String, dynamic> section) {
+    final List topics = section["topics"] ?? [];
+
+    return ExpansionTile(
+      title: Text(
+        section["title"] ?? "Module",
+        style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
+      ),
+      children: [
+        for (var topic in topics) ...[
+          _topicRow(
+            topic["title"] ?? "Topic",
+            topic["isTopicCompleted"] == true,
+          ),
+
+          if (topic["quizId"] != null)
+            _quizRow(
+              topic["title"] ?? "Topic",
+              topic["isTopicQuizCompleted"] == true,
+            ),
+        ],
       ],
-    ],
-  );
-}
+    );
+  }
 
-// Top rows
-Widget _simpleRow(String title, bool done) {
-  return ListTile(
-    title: Text(title),
-    trailing: Icon(
-      done ? Icons.check_circle : Icons.lock,
-      color: done ? Color(0xFF006A63) : Colors.grey,
-    ),
-    onTap: () {
-      // Print row text
-      print("CLICKED: $title");
-    },
-  );
-}
+  //  TOP ROW
+  Widget _simpleRow(String title, bool done) {
+    rowNumber += 1;
+    final int thisRow = rowNumber;
 
-// Topic row
-Widget _topicRow(String title, bool done) {
-  return ListTile(
-    contentPadding: const EdgeInsets.only(left: 32, right: 16),
-    title: Text(title),
-    trailing: Icon(
-      done ? Icons.check_circle : Icons.lock,
-      color: done ? Color(0xFF006A63) : Colors.grey,
-      size: 20,
-    ),
-    onTap: () {
-      // Print topic title
-      print("CLICKED TOPIC: $title");
-    },
-  );
-}
+    return ListTile(
+      title: Text(
+        title,
+        style: const TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+      ),
+      trailing: _getIcon(done, thisRow),
+      onTap: () {
+        print("ROW $thisRow: $title");
+      },
+    );
+  }
 
-// Quiz row
-Widget _quizRow(String topicTitle, bool done) {
-  return ListTile(
-    contentPadding: const EdgeInsets.only(left: 48, right: 16),
-    title: const Text("Quiz"),
-    trailing: Icon(
-      done ? Icons.check_circle : Icons.lock,
-      color: done ? Color(0xFF006A63) : Colors.grey,
-      size: 20,
-    ),
-    onTap: () {
-      // Print quiz under which topic
-      print("CLICKED QUIZ FOR: $topicTitle");
-    },
-  );
+  //  TOPIC ROW
+  Widget _topicRow(String title, bool done) {
+    rowNumber += 1;
+    final int thisRow = rowNumber;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 32, right: 16),
+      title: Text(
+        title,
+        style: const TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+      ),
+      trailing: _getIcon(done, thisRow),
+      onTap: () {
+        print("ROW $thisRow TOPIC: $title");
+      },
+    );
+  }
+
+  //  QUIZ ROW
+  Widget _quizRow(String topicTitle, bool done) {
+    rowNumber += 1;
+    final int thisRow = rowNumber;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 48, right: 16),
+      title: const Text(
+        "Quiz",
+        style: TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+      ),
+      trailing: _getIcon(done, thisRow),
+      onTap: () {
+        print("ROW $thisRow QUIZ FOR: $topicTitle");
+      },
+    );
+  }
 }
