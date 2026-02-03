@@ -72,9 +72,12 @@ class CoursedetailsState extends State<Coursedetails> {
         courseTitle: _courseTitle,
         data: modulesData, // Send RAW JSON
       ),
-      body: Padding(
-        padding: EdgeInsetsGeometry.all(20),
-        child: CourseDetailsVideo(),
+      body: Container(
+        color: Colors.grey.shade200, // your background color
+        child: const Padding(
+          padding: EdgeInsets.all(20),
+          child: CourseDetailsVideo(),
+        ),
       ),
     );
   }

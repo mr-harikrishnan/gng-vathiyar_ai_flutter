@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/widgets/intro-des-container.dart';
 import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
 
 class CourseDetailsVideo extends StatefulWidget {
@@ -40,6 +41,25 @@ class CourseDetailsVideoState extends State<CourseDetailsVideo> {
         ChewieVideoPlayer(
           videoUrl:
               'https://cdn.appbuild.pro/course/content/669ba10e8be13680e0b6478f/669ba10e8be13680e0b6478f.m3u8',
+        ),
+        SizedBox(height: 12),
+        Container(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Course Description",
+            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+        ),
+        SizedBox(height: 12),
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white10,
+            border: Border.all(color: Colors.black12),
+            borderRadius: BorderRadius.circular(12),
+          ),
+
+          child: IntroDesContainer(),
         ),
       ],
     );
