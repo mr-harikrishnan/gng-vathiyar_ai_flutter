@@ -12,7 +12,8 @@ dependencies:
   fluttertoast: ^9.0.0
   get: ^4.6.6
   flutter_secure_storage: ^9.0.0
-    
+  video_player: ^2.10.1
+  chewie: ^1.4.3
   email_validator: ^2.1.17
   amplify_flutter: ^1.6.1
   amplify_auth_cognito: ^1.6.1

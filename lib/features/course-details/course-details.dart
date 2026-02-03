@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
 import 'package:vathiyar_ai_flutter/widgets/course-module-side-bar.dart';
+import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
 
 class Coursedetails extends StatefulWidget {
   const Coursedetails({super.key});
@@ -43,13 +44,12 @@ class CoursedetailsState extends State<Coursedetails> {
       );
 
       // Check JSON type
-      if ( data is Map<String, dynamic>) {
+      if (data is Map<String, dynamic>) {
         setState(() {
           // Read sections directly from API JSON
           modulesData = data;
           _loading = false;
         });
-
       } else {
         throw Exception("Invalid API format");
       }
@@ -79,9 +79,10 @@ class CoursedetailsState extends State<Coursedetails> {
         data: modulesData, // Send RAW JSON
       ),
       body: Center(
-        child: _loading
-            ? const CircularProgressIndicator()
-            : const Text("Course Content"),
+        child: ChewieVideoPlayer(
+          videoUrl:
+              "https://cdn.appbuild.pro/course/content/669ba10e8be13680e0b6478f/669ba10e8be13680e0b6478f.m3u8",
+        ),
       ),
     );
   }
