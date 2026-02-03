@@ -52,11 +52,19 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
                   _simpleRow(
                     "Introduction to the Session",
                     datas["isIntroCompleted"] == true,
+                    datas["introduction"]?["contentIds"]?[0]?["_id"] ??
+                        "no data",
                   ),
 
                   const Divider(height: 1),
 
-                  _simpleRow("Pre-Test", datas["isPreTestCompleted"] == true),
+                  _simpleRow(
+                    "Pre-Test",
+                    datas["isPreTestCompleted"] == true,
+                    datas["preTestId"] != null
+                        ? datas["preTestId"].toString()
+                        : "no data",
+                  ),
 
                   const Divider(height: 1),
 
@@ -120,12 +128,13 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
           _topicRow(
             topic["title"] ?? "Topic",
             topic["isTopicCompleted"] == true,
+            topic?["topicId"]?["contentIds"]?[0]?["_id"] ?? "no data",
           ),
-
           if (topic["quizId"] != null)
             _quizRow(
               topic["title"] ?? "Topic",
               topic["isTopicQuizCompleted"] == true,
+              topic["quizId"].toString(),
             ),
         ],
       ],
@@ -133,7 +142,7 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
   }
 
   //  TOP ROW
-  Widget _simpleRow(String title, bool done) {
+  Widget _simpleRow(String title, bool done, String contentId) {
     rowNumber += 1;
     final int thisRow = rowNumber;
 
@@ -144,13 +153,14 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
       ),
       trailing: _getIcon(done, thisRow),
       onTap: () {
-        print("ROW $thisRow: $title");
+        print("Clicked on '$title'");
+        print("Content ID: $contentId");
       },
     );
   }
 
   //  TOPIC ROW
-  Widget _topicRow(String title, bool done) {
+  Widget _topicRow(String title, bool done, String contentId) {
     rowNumber += 1;
     final int thisRow = rowNumber;
 
@@ -162,13 +172,14 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
       ),
       trailing: _getIcon(done, thisRow),
       onTap: () {
-        print("ROW $thisRow TOPIC: $title");
+        print("Clicked on TOPIC: '$title'");
+        print("Content ID: $contentId");
       },
     );
   }
 
   //  QUIZ ROW
-  Widget _quizRow(String topicTitle, bool done) {
+  Widget _quizRow(String topicTitle, bool done, String quizId) {
     rowNumber += 1;
     final int thisRow = rowNumber;
 
@@ -180,7 +191,8 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
       ),
       trailing: _getIcon(done, thisRow),
       onTap: () {
-        print("ROW $thisRow QUIZ FOR: $topicTitle");
+        print("Clicked on QUIZ for: $topicTitle");
+        print("Quiz ID: $quizId");
       },
     );
   }
