@@ -31,9 +31,9 @@ class _ChewieVideoPlayerState extends State<ChewieVideoPlayer> {
       aspectRatio: _videoPlayerController.value.aspectRatio,
       autoPlay: false,
       looping: false,
-      // Additional controls can be added here
       fullScreenByDefault: false,
-      showControlsOnInitialize: true,
+      showControlsOnInitialize: false,
+      hideControlsTimer: const Duration(seconds: 3),
     );
     setState(() {});
   }
@@ -51,9 +51,24 @@ class _ChewieVideoPlayerState extends State<ChewieVideoPlayer> {
       child:
           _chewieController != null &&
               _chewieController!.videoPlayerController.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _videoPlayerController.value.aspectRatio,
-              child: Chewie(controller: _chewieController!),
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 83, 82, 82),
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: Chewie(controller: _chewieController!),
+                  ),
+                ),
+              ),
             )
           : const CircularProgressIndicator(),
     );

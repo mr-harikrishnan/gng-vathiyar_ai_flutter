@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
+import 'package:vathiyar_ai_flutter/features/course-details/ui/course-details-video.dart';
 import 'package:vathiyar_ai_flutter/widgets/course-module-side-bar.dart';
 import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
 
@@ -78,11 +79,9 @@ class CoursedetailsState extends State<Coursedetails> {
         courseTitle: _courseTitle,
         data: modulesData, // Send RAW JSON
       ),
-      body: Center(
-        child: ChewieVideoPlayer(
-          videoUrl:
-              "https://cdn.appbuild.pro/course/content/669ba10e8be13680e0b6478f/669ba10e8be13680e0b6478f.m3u8",
-        ),
+      body: Padding(
+        padding: EdgeInsetsGeometry.all(20),
+        child: CourseDetailsVideo(),
       ),
     );
   }

@@ -8,7 +8,7 @@ import 'package:vathiyar_ai_flutter/core/utils/utils.dart';
 import 'features/auth/ui/login-screen.dart';
 import 'features/dashboard/ui/dashboard-screen.dart';
 import 'features/my-courses/ui/my-courses.dart';
-import 'features/course-details/course-details.dart';
+import 'features/course-details/ui/course-details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
