@@ -4,11 +4,13 @@ import 'package:vathiyar_ai_flutter/app-colors.dart';
 class CourseModuleSideBar extends StatefulWidget {
   final String courseTitle;
   final dynamic data;
+  final Function onContentChange;
 
   const CourseModuleSideBar({
     super.key,
     required this.courseTitle,
     required this.data,
+    required this.onContentChange,
   });
 
   @override
@@ -96,7 +98,7 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
   }
 
   //  ICON LOGIC
-  Icon _getIcon(bool done, int thisRow) {
+  Icon _getIcon(bool done, int thisRow, String contentId) {
     if (done) {
       _lastDoneRow = thisRow;
       return const Icon(Icons.check_circle, color: AppColors.primary);
@@ -116,7 +118,10 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
     return ExpansionTile(
       title: Text(
         section["title"] ?? "Module",
-        style: const TextStyle(fontWeight: FontWeight.w400, color: AppColors.greylight),
+        style: const TextStyle(
+          fontWeight: FontWeight.w400,
+          color: AppColors.greylight,
+        ),
       ),
       children: [
         for (var topic in topics) ...[
@@ -142,14 +147,13 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
     final int thisRow = rowNumber;
 
     return ListTile(
-      title: Text(
-        title,
-        style: const TextStyle(color: AppColors.greylight),
-      ),
-      trailing: _getIcon(done, thisRow),
+      title: Text(title, style: const TextStyle(color: AppColors.greylight)),
+      trailing: _getIcon(done, thisRow, contentId),
       onTap: () {
         print("Clicked on '$title'");
         print("Content ID: $contentId");
+        widget.onContentChange(contentId);
+        Navigator.pop(context);
       },
     );
   }
@@ -161,14 +165,13 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 32, right: 16),
-      title: Text(
-        title,
-        style: const TextStyle(color: AppColors.greylight),
-      ),
-      trailing: _getIcon(done, thisRow),
+      title: Text(title, style: const TextStyle(color: AppColors.greylight)),
+      trailing: _getIcon(done, thisRow, contentId),
       onTap: () {
         print("Clicked on TOPIC: '$title'");
         print("Content ID: $contentId");
+        widget.onContentChange(contentId);
+        Navigator.pop(context);
       },
     );
   }
@@ -180,14 +183,13 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 48, right: 16),
-      title: const Text(
-        "Quiz",
-        style: TextStyle(color: AppColors.greylight),
-      ),
-      trailing: _getIcon(done, thisRow),
+      title: const Text("Quiz", style: TextStyle(color: AppColors.greylight)),
+      trailing: _getIcon(done, thisRow, quizId),
       onTap: () {
         print("Clicked on QUIZ for: $topicTitle");
         print("Quiz ID: $quizId");
+        widget.onContentChange(quizId);
+        Navigator.pop(context);
       },
     );
   }

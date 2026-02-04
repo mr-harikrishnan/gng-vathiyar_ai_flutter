@@ -14,6 +14,7 @@ class CoursedetailsState extends State<Coursedetails> {
   String _courseId = "";
   String _courseTitle = "";
   dynamic modulesData;
+  String currentContent = "";
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -32,6 +33,7 @@ class CoursedetailsState extends State<Coursedetails> {
     }
   }
 
+  //get modules data
   Future<void> _loadCourseModules() async {
     try {
       final data = await GetCourseModuleApiService.getCourseModule(
@@ -41,6 +43,11 @@ class CoursedetailsState extends State<Coursedetails> {
       if (data is Map<String, dynamic>) {
         setState(() {
           modulesData = data;
+          final initialContentId = _findInitialContentId(data);
+          if (initialContentId.isNotEmpty) {
+            _onContentChange(initialContentId);
+            print("content id ====== $initialContentId");
+          }
         });
       } else {
         throw Exception("Invalid API format");
@@ -48,6 +55,38 @@ class CoursedetailsState extends State<Coursedetails> {
     } catch (e) {
       print("API Error: $e");
     }
+  }
+
+  //get current content
+  String _findInitialContentId(Map<String, dynamic> data) {
+    if (data["isIntroCompleted"] != true) {
+      return data["introduction"]?["contentIds"]?[0]?["_id"] ?? "";
+    }
+    if (data["isPreTestCompleted"] != true) {
+      return data["preTestId"]?.toString() ?? "";
+    }
+    if (data["sections"] != null) {
+      for (var section in data["sections"]) {
+        if (section["topics"] != null) {
+          for (var topic in section["topics"]) {
+            if (topic["isTopicCompleted"] != true) {
+              return topic?["topicId"]?["contentIds"]?[0]?["_id"] ?? "";
+            }
+            if (topic["quizId"] != null &&
+                topic["isTopicQuizCompleted"] != true) {
+              return topic["quizId"].toString();
+            }
+          }
+        }
+      }
+    }
+    return data["introduction"]?["contentIds"]?[0]?["_id"] ?? "";
+  }
+
+  void _onContentChange(String contentId) {
+    setState(() {
+      currentContent = contentId;
+    });
   }
 
   @override
@@ -69,12 +108,13 @@ class CoursedetailsState extends State<Coursedetails> {
       endDrawer: CourseModuleSideBar(
         courseTitle: _courseTitle,
         data: modulesData,
+        onContentChange: _onContentChange,
       ),
       body: Container(
-        child: const Padding(
-          padding: EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           //Course details Video Screen
-          child: CourseDetailsVideo(),
+          child: CourseDetailsVideo(contentId: currentContent),
         ),
       ),
     );

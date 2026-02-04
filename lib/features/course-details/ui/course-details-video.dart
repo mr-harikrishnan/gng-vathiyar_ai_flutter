@@ -4,7 +4,8 @@ import 'package:vathiyar_ai_flutter/widgets/intro-des-container.dart';
 import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
 
 class CourseDetailsVideo extends StatefulWidget {
-  const CourseDetailsVideo({super.key});
+  final String contentId;
+  const CourseDetailsVideo({super.key, required this.contentId});
 
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +15,13 @@ class CourseDetailsVideo extends StatefulWidget {
 
 class CourseDetailsVideoState extends State<CourseDetailsVideo> {
   bool isCompleted = true;
+  late String contentId;
+
+  @override
+  void initState() {
+    super.initState();
+    contentId = widget.contentId;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +43,7 @@ class CourseDetailsVideoState extends State<CourseDetailsVideo> {
             child: Text(
               isCompleted == true ? "Completed" : "Mark As Completed",
               style: TextStyle(
-                color: isCompleted == true
-                    ? Colors.white
-                    : AppColors.greylight,
+                color: isCompleted == true ? Colors.white : AppColors.greylight,
                 fontWeight: FontWeight.w400,
               ),
             ),
