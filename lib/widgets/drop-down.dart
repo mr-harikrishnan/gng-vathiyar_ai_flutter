@@ -1,6 +1,7 @@
 // lib/widgets/drop_down.dart
 
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 
 class Dropdown extends StatefulWidget {
   final List<String> languages;
@@ -48,7 +49,7 @@ class _DropdownState extends State<Dropdown> {
           children: const [
             SizedBox(
               height: 24,
-              child: VerticalDivider(thickness: 1, color: Colors.grey),
+              child: VerticalDivider(thickness: 1, color: AppColors.greylight),
             ),
             SizedBox(width: 8),
             Icon(Icons.keyboard_arrow_down),
@@ -64,11 +65,11 @@ class _DropdownState extends State<Dropdown> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.grey),
+            borderSide: const BorderSide(color: AppColors.greylight),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF009688), width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/widgets/intro-des-container.dart';
 import 'package:vathiyar_ai_flutter/widgets/video-player.dart';
 
@@ -24,8 +25,8 @@ class CourseDetailsVideoState extends State<CourseDetailsVideo> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: isCompleted == true
-                  ? Color(0xFF006A63)
-                  : Colors.grey.shade100,
+                  ? AppColors.primary
+                  : AppColors.greylight,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -36,7 +37,7 @@ class CourseDetailsVideoState extends State<CourseDetailsVideo> {
               style: TextStyle(
                 color: isCompleted == true
                     ? Colors.white
-                    : Colors.grey.shade600,
+                    : AppColors.greylight,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -61,7 +62,7 @@ class CourseDetailsVideoState extends State<CourseDetailsVideo> {
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white10,
-            border: Border.all(color: Colors.black12),
+            border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.circular(12),
           ),
 

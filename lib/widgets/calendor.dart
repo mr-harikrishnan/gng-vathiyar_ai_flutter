@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 
 class CustomCalendarPage extends StatefulWidget {
   const CustomCalendarPage({super.key});
@@ -15,7 +16,7 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7F6),
+      backgroundColor: AppColors.secondary,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Container(
@@ -102,11 +103,11 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
                 // Style for days
                 calendarStyle: CalendarStyle(
                   todayDecoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: AppColors.greylight,
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: const BoxDecoration(
-                    color: Color(0xFF0A7F6F), // Green selected circle
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
                   selectedTextStyle: const TextStyle(
@@ -125,11 +126,11 @@ class _CustomCalendarPageState extends State<CustomCalendarPage> {
                 daysOfWeekStyle: const DaysOfWeekStyle(
                   weekdayStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                    color: AppColors.greylight,
                   ),
                   weekendStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                    color: AppColors.greylight,
                   ),
                 ),
               ),

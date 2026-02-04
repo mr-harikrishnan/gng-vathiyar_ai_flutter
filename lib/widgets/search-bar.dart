@@ -1,6 +1,7 @@
 // lib/widgets/search_bar_widget.dart
 
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final Function(String)? onChanged;
@@ -48,11 +49,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: AppColors.greylight),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xFF009688), width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
 
         // Static search icon

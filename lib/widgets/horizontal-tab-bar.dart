@@ -55,7 +55,7 @@ class _HorizontalTabBarState extends State<HorizontalTabBar> {
                   fontSize: 16,
                   color: isSelected
                       ? const Color.fromARGB(255, 1, 88, 79)
-                      : Colors.black54,
+                      : Colors.black,
                 ),
               ),
             ),

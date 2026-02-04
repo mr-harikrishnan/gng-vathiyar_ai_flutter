@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/core/services/cognito-service.dart';
 import 'package:vathiyar_ai_flutter/core/storage/secure-storage/secure-storage.dart';
 import 'package:vathiyar_ai_flutter/widgets/show-yes-no-dailog.dart';
@@ -39,7 +40,7 @@ class _AppDrawerState extends State<AppDrawer> {
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
 
     return Drawer(
-      backgroundColor: const Color(0xFFF5F7F6),
+      backgroundColor: AppColors.secondary,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -107,7 +108,7 @@ class _AppDrawerState extends State<AppDrawer> {
         children: [
           const CircleAvatar(
             radius: 28,
-            backgroundColor: Colors.teal,
+            backgroundColor: AppColors.primary,
             child: Icon(Icons.person, color: Colors.white),
           ),
           const SizedBox(width: 12),
@@ -117,7 +118,7 @@ class _AppDrawerState extends State<AppDrawer> {
               children: [
                 const Text(
                   "Logged in as",
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
+                  style: TextStyle(fontSize: 12, color: Colors.black),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -125,7 +126,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Colors.black,
                   ),
                 ),
               ],

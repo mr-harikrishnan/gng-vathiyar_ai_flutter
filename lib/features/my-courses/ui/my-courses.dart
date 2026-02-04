@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/features/my-courses/ui/assigned-courses.dart';
 import 'package:vathiyar_ai_flutter/features/my-courses/ui/in-progress.dart';
 import 'package:vathiyar_ai_flutter/widgets/app-drawer.dart';
@@ -24,7 +25,7 @@ class MyCoursesScreenState extends State<MyCoures> {
       ),
       drawer: const AppDrawer(),
       body: Container(
-        color: const Color(0xFFF5F7F6),
+        color: AppColors.secondary,
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +37,7 @@ class MyCoursesScreenState extends State<MyCoures> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
                       backgroundColor: screenIndex == 0
-                          ? Color(0xFF016A63)
+                          ? AppColors.primary
                           : Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -52,7 +53,7 @@ class MyCoursesScreenState extends State<MyCoures> {
                       style: TextStyle(
                         color: screenIndex == 0
                             ? Colors.white
-                            : Color(0xFF016A63),
+                            : AppColors.primary,
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
@@ -66,7 +67,7 @@ class MyCoursesScreenState extends State<MyCoures> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: screenIndex == 1
-                          ? Color(0xFF016A63)
+                          ? AppColors.primary
                           : Colors.white,
                       minimumSize: const Size.fromHeight(48),
                       shape: RoundedRectangleBorder(
@@ -83,7 +84,7 @@ class MyCoursesScreenState extends State<MyCoures> {
                       style: TextStyle(
                         color: screenIndex == 1
                             ? Colors.white
-                            : Color(0xFF016A63),
+                            : AppColors.primary,
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),

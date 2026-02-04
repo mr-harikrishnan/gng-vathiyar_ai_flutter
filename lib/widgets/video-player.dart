@@ -85,7 +85,7 @@ class _ChewieVideoPlayerState extends State<ChewieVideoPlayer> {
                                 child: Icon(
                                   Icons.play_circle_fill,
                                   size: 80,
-                                  color: Colors.black45,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),

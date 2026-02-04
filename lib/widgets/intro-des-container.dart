@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 
 class IntroDesContainer extends StatefulWidget {
   const IntroDesContainer({super.key});
@@ -18,7 +19,7 @@ class IntroDesContainerState extends State<IntroDesContainer> {
       children: [
         Text(
           "This course will help the learners to understand the importance of organizing ‘No Bag Day’ at school. After finishing this course learners will also be able to plan and organize 'No Bag Day' at school. ",
-          style: TextStyle(color: Colors.grey.shade600),
+          style: TextStyle(color: AppColors.greylight),
         ),
         SizedBox(height: 12),
         Container(
@@ -26,7 +27,7 @@ class IntroDesContainerState extends State<IntroDesContainer> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Color(0xFFEDF8F5),
+              color: AppColors.secondary,
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(

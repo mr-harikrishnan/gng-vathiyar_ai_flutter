@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-my-courses/get-my-courses-api.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 
 class CourseCard extends StatefulWidget {
   final CourseModel course;
@@ -65,11 +66,11 @@ class CourseCardState extends State<CourseCard> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black12,
+              color: Colors.white,
               blurRadius: 8,
               offset: Offset(0, 4),
             ),
@@ -141,7 +142,7 @@ class CourseCardState extends State<CourseCard> {
             // Subtitle
             Text(
               widget.course.subTitle,
-              style: const TextStyle(fontSize: 13, color: Colors.grey),
+              style: const TextStyle(fontSize: 13, color: AppColors.greylight),
             ),
 
             const SizedBox(height: 12),
@@ -156,7 +157,7 @@ class CourseCardState extends State<CourseCard> {
                     const Icon(
                       Icons.pie_chart,
                       size: 16,
-                      color: Color(0xFF009688),
+                      color: AppColors.primary,
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -167,7 +168,7 @@ class CourseCardState extends State<CourseCard> {
                 ),
                 Text(
                   _formatUpdatedAt(widget.course.updatedAt),
-                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                  style: const TextStyle(fontSize: 10, color: AppColors.greylight),
                 ),
               ],
             ),

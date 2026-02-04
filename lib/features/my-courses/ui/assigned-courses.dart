@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-languages/get-languages-api.dart';
 import 'package:vathiyar_ai_flutter/api/get-categories/get-categories_api.dart';
 import 'package:vathiyar_ai_flutter/api/get-my-courses/get-my-courses-api.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/widgets/course-card.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop-down.dart';
 import 'package:vathiyar_ai_flutter/widgets/horizontal-tab-bar.dart';
@@ -184,7 +185,7 @@ class AssignedCoursesState extends State<AssignedCourses> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF5F7F6),
+      color: AppColors.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

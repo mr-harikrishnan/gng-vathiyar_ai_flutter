@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/widgets/show-pop.dart';
 import '../../../core/services/cognito-service.dart';
 
@@ -163,8 +164,8 @@ class LoginPageState extends State<LoginPage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _isLoading
-                            ? const Color.fromARGB(255, 102, 248, 238)
-                            : const Color(0xFF016A63),
+                            ? AppColors.secondary
+                            : AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-course-module/get-course-module-api.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/features/course-details/ui/course-details-video.dart';
 import 'package:vathiyar_ai_flutter/widgets/course-module-side-bar.dart';
 
@@ -71,7 +72,7 @@ class CoursedetailsState extends State<Coursedetails> {
         data: modulesData,
       ),
       body: Container(
-        color: Colors.grey.shade200,
+        color: AppColors.secondary,
         child: const Padding(
           padding: EdgeInsets.all(20),
           //Course details Video Screen

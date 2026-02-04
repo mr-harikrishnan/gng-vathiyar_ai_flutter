@@ -1,10 +1,5 @@
-// FULL WORKING CODE
-// ICON RULE:
-// - done == true      -> check_circle (green)
-// - first row after last done -> star_outline (orange)
-// - rest             -> lock (grey)
-
 import 'package:flutter/material.dart';
+import 'package:vathiyar_ai_flutter/app-colors.dart';
 
 class CourseModuleSideBar extends StatefulWidget {
   final String courseTitle;
@@ -104,14 +99,14 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
   Icon _getIcon(bool done, int thisRow) {
     if (done) {
       _lastDoneRow = thisRow;
-      return const Icon(Icons.check_circle, color: Color(0xFF006A63));
+      return const Icon(Icons.check_circle, color: AppColors.primary);
     }
 
     if (thisRow == _lastDoneRow + 1) {
       return const Icon(Icons.check_circle, color: Colors.transparent);
     }
 
-    return const Icon(Icons.lock, color: Colors.grey);
+    return const Icon(Icons.lock, color: AppColors.greylight);
   }
 
   //  SECTION
@@ -121,7 +116,7 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
     return ExpansionTile(
       title: Text(
         section["title"] ?? "Module",
-        style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
+        style: const TextStyle(fontWeight: FontWeight.w400, color: AppColors.greylight),
       ),
       children: [
         for (var topic in topics) ...[
@@ -149,7 +144,7 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
     return ListTile(
       title: Text(
         title,
-        style: const TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+        style: const TextStyle(color: AppColors.greylight),
       ),
       trailing: _getIcon(done, thisRow),
       onTap: () {
@@ -168,7 +163,7 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
       contentPadding: const EdgeInsets.only(left: 32, right: 16),
       title: Text(
         title,
-        style: const TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+        style: const TextStyle(color: AppColors.greylight),
       ),
       trailing: _getIcon(done, thisRow),
       onTap: () {
@@ -187,7 +182,7 @@ class _CourseModuleSideBarState extends State<CourseModuleSideBar> {
       contentPadding: const EdgeInsets.only(left: 48, right: 16),
       title: const Text(
         "Quiz",
-        style: TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+        style: TextStyle(color: AppColors.greylight),
       ),
       trailing: _getIcon(done, thisRow),
       onTap: () {
