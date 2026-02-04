@@ -40,7 +40,6 @@ class _AppDrawerState extends State<AppDrawer> {
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
 
     return Drawer(
-      backgroundColor: AppColors.secondary,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -148,8 +147,8 @@ class _AppDrawerState extends State<AppDrawer> {
     required String route,
   }) {
     return ListTile(
-      leading: Icon(icon, color: Colors.black),
-      title: Text(title, style: const TextStyle(color: Colors.black)),
+      leading: Icon(icon, color: AppColors.greydark),
+      title: Text(title, style: const TextStyle(color: AppColors.greydark)),
       onTap: onTap,
     );
   }

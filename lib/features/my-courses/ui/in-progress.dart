@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:vathiyar_ai_flutter/api/get-languages/get-languages-api.dart';
 import 'package:vathiyar_ai_flutter/api/get-my-courses/get-my-courses-api.dart';
-import 'package:vathiyar_ai_flutter/app-colors.dart';
 import 'package:vathiyar_ai_flutter/widgets/course-card.dart';
 import 'package:vathiyar_ai_flutter/widgets/drop-down.dart';
 import 'package:vathiyar_ai_flutter/widgets/search-bar.dart';
@@ -144,7 +143,6 @@ class InProgressState extends State<InProgress> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.secondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

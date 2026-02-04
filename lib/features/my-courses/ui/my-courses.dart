@@ -25,7 +25,6 @@ class MyCoursesScreenState extends State<MyCoures> {
       ),
       drawer: const AppDrawer(),
       body: Container(
-        color: AppColors.secondary,
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +54,7 @@ class MyCoursesScreenState extends State<MyCoures> {
                             ? Colors.white
                             : AppColors.primary,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -86,13 +85,14 @@ class MyCoursesScreenState extends State<MyCoures> {
                             ? Colors.white
                             : AppColors.primary,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                        fontSize: 15,
                       ),
                     ),
                   ),
                 ),
               ],
             ),
+
             const SizedBox(height: 10),
 
             if (screenIndex == 0)

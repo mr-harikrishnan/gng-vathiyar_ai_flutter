@@ -23,7 +23,7 @@ class _DropdownState extends State<Dropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      
       child: DropdownButtonFormField<String>(
         value: widget.value,
         hint: const Text('All Languages'),
